@@ -47,6 +47,7 @@ Neccesary algorithms:
 - random number generator
 - RSA encryption
 - Hashing algorithm (sha256?)
+
 The cryptographic scheme is pretty simple. The message is encrypted first with the private key of the sender, after which it is hashed, after which it is encrypted again with the public key of the receiver, after which this doubly-encrypted message is sent in msg, and the hash after the first encryption is added.
 
 When a client reads the database he cannot read anything, since it is encrypted. He can decode it with his private key first to. If the hash of whatever he gets is the same as the hash that was sent, it must be meant for him, since a different key would yield a different message and therefore a different hash. Anyway, once he makes sure that the message is meant for him, he can consult the provided user ID and decrypt it with the public key of the user. This ensures that it was actually sent by the user, since any other one won't be decrypted with their public key.
