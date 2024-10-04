@@ -28,12 +28,29 @@ def receive():
     return ALL_MSGS[requested_index:len(ALL_MSGS)] # return all messages from the requested to the latest.
 ```
 
+## client
+The client is quite simple and it works pretty much as expected with the server. Its sends data and only requests onseen messages. All interesting information is in the cryptographic scheme, but still, it is good to know that it sends four pieces of data:
+```python
+    parameters = {
+            "time": floor(timestamp),
+            "hash": msg_hash,
+            "msg": message_plain,
+            "userID": userID
+    }
+```
+But all of it is pretty self-explanatory. The time is the unix timestamp
+when it has been sent, the hash is the hash (algorithm tbd) of msg and the usrID is a unique number defining who sent it.
+
 ## Cryptographic scheme
+Neccesary algorithms:
+- prime number generator
+- random number generator
+- RSA encryption
+- Hashing algorithm (sha256?)
+The cryptographic scheme is pretty simple. The message is encrypted first with the private key of the sender, after which it is hashed, after which it is encrypted again with the public key of the receiver, after which this doubly-encrypted message is sent in msg, and the hash after the first encryption is added.
 
-Lorem Ipsum dolor...
+When a client reads the database he cannot read anything, since it is encrypted. He can decode it with his private key first to. If the hash of whatever he gets is the same as the hash that was sent, it must be meant for him, since a different key would yield a different message and therefore a different hash. Anyway, once he makes sure that the message is meant for him, he can consult the provided user ID and decrypt it with the public key of the user. This ensures that it was actually sent by the user, since any other one won't be decrypted with their public key.
 
-## Protocol info
-
-Sit amet consecitur...
+To summarize: an observer does not know to whom any message was sent and what was sent. The only available information is _who_ sent a message.
 
 ## Build info
