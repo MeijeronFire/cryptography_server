@@ -29,9 +29,9 @@ primes.primeGen(100)
 ######################################
 
 # Generate keys
-def keygen():
-    p1 = primes.primeGen()
-    p2 = primes.primeGen()
+def keygen_RSA():
+    p1 = primes.primeGen(bits=2048)
+    p2 = primes.primeGen(bits=2048)
     n = p1*p2
     set_key(dotenv_path=env_path, key_to_set="MOD_CLASS", value_to_set=str(n))
 
@@ -47,18 +47,18 @@ def keygen():
     set_key(dotenv_path=env_path, key_to_set="PUBKEY", value_to_set=str(e))
     set_key(dotenv_path=env_path, key_to_set="PRIVKEY", value_to_set=str(d))
 
-def encrypt(message):
-    base = int(os.getenv("PUBKEY"))
+def encrypt_RSA(message, base=int(os.getenv("PUBKEY"))):
     modulo = int(os.getenv("MOD_CLASS"))
     return pow(message, base, modulo)
 
-def decrypt(message):
+# Works the same as encrypting with a private key.
+def decrypt_RSA(message):
     base = int(os.getenv("PRIVKEY"))
     modulo = int(os.getenv("MOD_CLASS"))
     return pow(message, base, modulo)
 
 # if the .env is _not_ present, generate it.
 if not os.getenv("MOD_CLASS") or not os.getenv("PUBKEY") or not os.getenv("PRIVKEY"):
-    keygen()
+    keygen_RSA()
 
 print("Succesfully initialized CrypTils v1.0!")

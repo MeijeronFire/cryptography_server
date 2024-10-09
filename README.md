@@ -43,7 +43,7 @@ when it has been sent, the hash is the hash (algorithm tbd) of msg and the usrID
 
 ## Cryptographic scheme
 Neccesary algorithms:
-- prime number generator
+- prime number generator -> write about how the faster mod\_exp worked.
 - random number generator
 - RSA encryption
 - Hashing algorithm (sha256?)
@@ -53,5 +53,7 @@ The cryptographic scheme is pretty simple. The message is encrypted first with t
 When a client reads the database he cannot read anything, since it is encrypted. He can decode it with his private key first to. If the hash of whatever he gets is the same as the hash that was sent, it must be meant for him, since a different key would yield a different message and therefore a different hash. Anyway, once he makes sure that the message is meant for him, he can consult the provided user ID and decrypt it with the public key of the user. This ensures that it was actually sent by the user, since any other one won't be decrypted with their public key.
 
 To summarize: an observer does not know to whom any message was sent and what was sent. The only available information is _who_ sent a message.
+
+More info: for RSA, the keysize is _2048 bits_. For some reason (check), this allows a size of (2048/8) - 42 bytes as a max size. The max size that we want is 256 bits, so that means that we do not need to take any steps to ensure that the message is divided into blocks.
 
 ## Build info

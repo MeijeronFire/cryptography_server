@@ -9,6 +9,11 @@ from random import randint
 import cryptils
 
 ###################################################################################################################
+def message_preperation(msg_pre):
+    msg_done = cryptils.decrypt_RSA(int(msg_pre)) # or: encrypt with private key
+    msg_done = cryptils.encrypt_RSA(int(msg_done)) # or: encrypt with public key
+    return msg_done
+
 
 def generate_message(message_plain):
     now = datetime.now()  
@@ -16,10 +21,12 @@ def generate_message(message_plain):
 
     msg_hash = sha256(message_plain.encode('utf-8')).hexdigest()
 
+    msg = message_preperation(message_plain)
+
     parameters = {
             "time": floor(timestamp),
             "hash": msg_hash,
-            "msg": message_plain,
+            "msg": msg,
             "userID": userID
     }
     return parameters
