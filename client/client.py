@@ -91,8 +91,8 @@ def update():
             for i in latest_data:
                 msg_plain = message_postprocessing(i["msg"], i["userID"])
                 if validate_integrity(str(msg_plain), i["hash"], i["userID"]):
-                    print("---\nintegrity validated\n---")
-                print(f"\n---------\n{i["userID"]}:\t{msg_plain}\n---------\ncryptsystem01 ~$ ", end="")
+                    print("\n---\nintegrity validated\n---")
+                    print(f"\n---------\n{i["userID"]}:\t{msg_plain}\n---------\ncryptsystem01 ~$ ", end="")
 
     # multithreading boilerplate
     procname = multiprocessing.Process(target=func, name="proc 1")
