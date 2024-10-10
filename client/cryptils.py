@@ -47,8 +47,12 @@ def keygen_RSA():
     set_key(dotenv_path=env_path, key_to_set="PUBKEY", value_to_set=str(e))
     set_key(dotenv_path=env_path, key_to_set="PRIVKEY", value_to_set=str(d))
 
-def encrypt_RSA(message, base=int(os.getenv("PUBKEY"))):
-    modulo = int(os.getenv("MOD_CLASS"))
+# if the .env is _not_ present, generate it.
+if not os.getenv("MOD_CLASS") or not os.getenv("PUBKEY") or not os.getenv("PRIVKEY"):
+    keygen_RSA()
+
+
+def encrypt_RSA(message, base=int(os.getenv("PUBKEY")), modulo=int(os.getenv("MOD_CLASS"))):
     return pow(message, base, modulo)
 
 # Works the same as encrypting with a private key.
@@ -57,8 +61,5 @@ def decrypt_RSA(message):
     modulo = int(os.getenv("MOD_CLASS"))
     return pow(message, base, modulo)
 
-# if the .env is _not_ present, generate it.
-if not os.getenv("MOD_CLASS") or not os.getenv("PUBKEY") or not os.getenv("PRIVKEY"):
-    keygen_RSA()
 
 print("Succesfully initialized CrypTils v1.0!")
