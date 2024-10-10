@@ -135,7 +135,7 @@ if __name__ == '__main__':
         inp = input("cryptsystem01 ~$ ")
         if inp == "q" or inp == "quit":
             exit()
-        tokenized_inp = inp.split(" ")
+        tokenized_inp = inp.split("+")
         print(tokenized_inp)
         send(tokenized_inp[1], tokenized_inp[0])
 
