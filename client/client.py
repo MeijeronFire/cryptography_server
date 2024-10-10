@@ -50,7 +50,7 @@ def generate_message(message_plain, target_pubk, target_modc):
     msg_hash = int.from_bytes(sha256(message_plain.encode('utf-8')).digest(), 'big')
     signed_msg_hash = cryptils.decrypt_RSA(msg_hash) # the same as signing :wow:
 
-    msg_done = cryptils.encrypt_RSA(int(message_plain), base=target_pubk, modulo=target_modc) # or: encrypt with public key
+    msg_done = cryptils.encrypt_RSA(message_plain, base=target_pubk, modulo=target_modc) # or: encrypt with public key
 
     parameters = {
             "time": floor(timestamp),
