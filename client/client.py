@@ -23,7 +23,7 @@ def validate_integrity(msg_plain, hash_signed, senderID):
     sender_modc = user_dict[str(senderID)][1]
     suspected_hash = int.from_bytes(sha256(msg_plain.encode('utf-8')).digest(), 'big')
     # de - signed, as in, removed the sign.
-    hash_designed = cryptils.encrypt_RSA(int(hash_signed), base=sender_pubk, modulo=sender_modc)
+    hash_designed = cryptils.encrypt_RSA(hash_signed, base=sender_pubk, modulo=sender_modc)
     if hash_designed == suspected_hash:
         return True
     return False
