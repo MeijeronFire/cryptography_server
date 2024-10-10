@@ -51,15 +51,28 @@ def keygen_RSA():
 if not os.getenv("MOD_CLASS") or not os.getenv("PUBKEY") or not os.getenv("PRIVKEY"):
     keygen_RSA()
 
-
+#Works for ascii now woo
 def encrypt_RSA(message, base=int(os.getenv("PUBKEY")), modulo=int(os.getenv("MOD_CLASS"))):
-    return pow(message, base, modulo)
+    values_pre = [ord(letter) for letter in message]
+    values = [str(val).zfill(3) for val in values_pre]
+    for i in values:
+        ascii_int = int(''.join(map(str, values)))
+    return pow(ascii_int, base, modulo)
 
 # Works the same as encrypting with a private key.
 def decrypt_RSA(message):
     base = int(os.getenv("PRIVKEY"))
     modulo = int(os.getenv("MOD_CLASS"))
-    return pow(message, base, modulo)
+    decr_int = pow(message, base, modulo)
+    values = []
+    while decr_int>0: 
+        remainder = decr_int%1000
+        values.append(remainder)
+        decr_int = decr_int//1000
+    values.reverse()
+    letters = [chr(ascii) for ascii in values]
+    decr_msg = ''.join([str(ascii) for ascii in letters])
+    return decr_msg
 
 
 print("Succesfully initialized CrypTils v1.0!")
