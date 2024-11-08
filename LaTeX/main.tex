@@ -1,7 +1,34 @@
+%
+%      ██████  ███████   ██    ██ ███████  ██████████
+%     ██░░░░██░██░░░░██ ░░██  ██ ░██░░░░██░░░░░██░░░ 
+%    ██    ░░ ░██   ░██  ░░████  ░██   ░██    ░██    
+%   ░██       ░███████    ░░██   ░███████     ░██    
+%   ░██       ░██░░░██     ░██   ░██░░░░      ░██    
+%   ░░██    ██░██  ░░██    ░██   ░██          ░██    
+%    ░░██████ ░██   ░░██   ░██   ░██          ░██    
+%     ░░░░░░  ░░     ░░    ░░    ░░           ░░     
+%
+%
+%    ███████  ██       ██  ████████
+%   ░██░░░░██░██      ░██ ██░░░░░░ 
+%   ░██   ░██░██   █  ░██░██       
+%   ░███████ ░██  ███ ░██░█████████
+%   ░██░░░░  ░██ ██░██░██░░░░░░░░██
+%   ░██      ░████ ░░████       ░██
+%   ░██      ░██░   ░░░██ ████████ 
+%   ░░       ░░       ░░ ░░░░░░░░  
+
 \documentclass{report} %fiks nog tekstgrootte, font, etc.
 \usepackage{graphicx} % Required for inserting images
 \usepackage[left=30mm, top=20mm]{geometry}
+\usepackage[
+    backend=biber,
+    style=apa
+    ]{biblatex}
+\usepackage{csquotes}
+\addbibresource{bronnen.bib}
 \usepackage[dutch]{babel}
+\usepackage{textgreek}
 \title{PWS Cryptografie - fiks titel nog!}
 \author{Otto Crawford (6A), Christiaan Tjong Tjin Tai (6B)}
 \date{\today}
@@ -28,14 +55,19 @@
 \chapter{Wiskunde in de cryptografie}
 Er zijn een aantal onderdelen in de wiskunde die erg belangrijk zijn in de cryptografie. Met name wiskunde op het gebied van priemgetallen en modulair rekenen is erg belangrijk. Hieronder volgen een aantal definities die wij zullen gebruiken.
 \section{Priemgetallen}
+Een getal is een \textit{priemgetal} als het getal slechts twee delers heeft: 1 en zichzelf. Deze eigenschap maakt priemgetallen uitstekend bruikbaar in de cryptografie. Als je namelijk twee priemgetallen p en q met elkaar vermenigvuldigt, is er slechts één juiste ontbinding van het product: p*q. Het is erg gemakkelijk voor computers om twee priemgetallen met elkaar te vermenigvuldigen, terwijl het juist veel moeilijker is om een product van twee priemgetallen te ontbinden in zijn factoren. Het is bijvoorbeeld triviaal om 11 en 13 te vermenigvuldigen, maar 143 ontbinden in zijn factoren gaat veel moeilijker. In de cryptografie worden echter niet zulke simpele getallen als 11 en 13 gebruikt, maar priemgetallen van honderden cijfers. Dit zorgt ervoor dat het miljarden jaren duurt om het product hiervan te ontbinden in factoren. Dergelijke operaties met priemgetallen kunnen dus worden gebruikt in de cryptografie, aangezien ze niet gemakkelijk kunnen worden omgekeerd.
 
 \section{Grootste gemene deler}
+De \textit{grootste gemene deler} (ggd) van twee getallen, zoals de naam zegt, laat zien wat de grootste deler is die twee getallen gemeen hebben. Deze kan verkregen worden door te kijken naar de priemfactorontbinding van beide getallen: de ggd is het product van alle priemfactoren die in beide ontbindingen voorkomen. Als de ggd van twee getallen 1 is, oftewel ze hebben geen priemfactoren gemeen, dan noemen we deze twee getallen \textit{copriem}.
 
 \section{Modulair rekenen}
+\textit{Modulair rekenen} is een vorm van rekenen waarbij elk getal een waarde krijgt tussen 0 en de modulo, \textit{n}. Deze waarde is gelijk aan de rest die overblijft wanneer het getal door n gedeeld wordt. 11 mod 4 is bijvoorbeeld 3, omdat 11/4 = 2 rest 3. In de cryptografie wordt modulo rekenen veel gebruikt. Het zorgt er namelijk voor dat bewerkingen van berichten in veel public key-cryptosystemen mogelijk worden gemaakt. 
 
 \section{Inverse}
+Bij modulair rekenen is de \textit{inverse} van een getal \textit{a} in modulo \textit{n} het getal \textit{b} waarvoor geldt: \begin{equation}{a \cdot b \, mod \, n = 1}\end{equation} Niet alle getallen hebben echter inverses in een bepaalde modulo. Een getal \textit{a} heeft alleen een inverse in modulo \textit{n} wanneer geldt dat \textit{a} en \textit{n} copriem zijn. Het totaal aantal getallen dat een inverse heeft in een bepaalde modulo, wordt \textphi \, genoemd. Voor een modulo \textit{n} die het product is van twee priemgetallen \textit{p} en \textit{q} geldt altijd: \begin{equation} \varphi = (p-1)(q-1) \end{equation}.
 
-\chapter{Verschillende algoritmes}
+
+\chapter{Verschillende algoritmes} % -> cryptografische primitieven
 \section{Priemgetallen genereren}
 
 \section{Diffie-Hellman???}
@@ -44,14 +76,69 @@ Er zijn een aantal onderdelen in de wiskunde die erg belangrijk zijn in de crypt
 
 \section{Digital signatures}
 
+%\section{AES}???
+
+\section{Hashing}
+
 \chapter{Een eigen protocol}
+Dit hoofdstuk betstaat uit twee delen: een omschrijving en de vereisten van het theoretische cryptosysteem \footnote{Moet ik dit definiëren?} en een uitleg van de implementatie hiervan in python.
 
-\section{Vereisten}
+\section{Vereisten en implementatie}
+Als eisen voor het cryptosysteem zijn de volgende punten vastgesteld:
+\begin{itemize}
+    \item Alle data wordt opgeslagen op een centrale server: \textit{geen} P2P\footnote{P2P: \textit{peer to peer}, betekent dat er een netwerk is van computers, zonder een hierarchie. Denk aan torrents.} communicatie.
+    \item Privacy wordt gemaximaliseerd. Zoveel mogelijk informatie moet geheim gehouden worden.
+    \item Zoveel mogelijk algoritmen worden zelf geïmplementeerd.
+\end{itemize}
 
-\section{Implementatie}
+\section{Cryptosysteem}
+Het cryptosysteem dat uiteindelijk is gekozen kan samengevat worden met het volgende diagram: \\
+%
+%
+%   MAAK DIAGRAM
+%
+%
+Clients worden een server aangewezen. Elke server heeft een bepaalde hoeveelheid. Hoe meer, hoe veiliger, maar hoe meer onnodige data opgeslagen wordt. Praktische tests zijn nodig om de juiste balans hiertussen te vinden.
+\subsection{Stuur-systeem}
+\begin{enumerate}
+    \item Een client stelt een bericht op om naar de server te sturen.
+    \item Als eerste wordt de volgende informatie vastgesteld: verzendingstijd, gehashte bericht, bericht, ID van de client.
+    \item Het bericht wordt versleuteld met RSA via de \textit{public key} van de ontvanger
+    \item De hash wordt versleuteld met de \textit{private key} van de zender, waardoor het bericht getekend wordt.
+\end{enumerate}
+
+\subsection{Ontvang-systeem}
+\begin{enumerate}
+    \item Elke paar seconden doet de client een check om te kijken of er nieuwe berichten zijn. Als dit zo is, worden ze opgeslagen.
+    \item Een nieuw bericht wordt ontcijferd met de \textit{private key} van de ontvanger. De hash wordt ontcijferd met de public key geassocieerd met de ID die gestuurd is met het bericht.
+    \item Nu wordt de integriteit van het bericht geverifieerd: door te kijken of de hash van het bericht hetzelfde is als de hash die zojuist ontsleuteld is, kan bepaald worden of het bericht wel of niet juist is (zie figuur \ref{tab:send_receive_truthtable}). Op deze manier kan het bericht alleen worden aangenomen als de zender eerlijk is over wie hij is en de ontvanger degene is die de zender bedoelde.
+\end{enumerate}
+
+\begin{table}[htp]
+    \centering
+    \begin{tabular}{p{3cm}|p{5cm}|p{5cm}}
+                        & Bedoelde ontvanger & Onbedoelde ontvanger \\ \hline
+         Andere zender dan geclaimd & hash ontcijferd met verkeerde \textit{public key}, bericht ontcijferd met verkeerde \textit{private key}. Hash en bericht komt niet overeen en het bericht is wartaal $\Rightarrow$ wordt weggegooid. & hash ontcijferd met verkeerde \textit{public key} $\Rightarrow$ zelf berekende hash is niet geleverde hash. Bericht is niet integer en wordt weggegooid \\ \hline
+         Zender integer & Hash correct ontcijferd, bericht correct ontcijferd, het deterministische hashing algoritme zorgt ervoor dat de berekende hash hetzelfde is als de gestuurde hash. Bericht in orde en wordt opgeslagen. & Hash wordt met de correte \textit{public key} ontsleuteld. Het bericht wordt ontcijferd met de verkeerde private key $\Rightarrow$ het bericht wordt gelezen als wartaal en de berekende hash komt niet overeen met de geleverde hash.\\
+    \end{tabular}
+    \caption{Caption}
+    \label{tab:send_receive_truthtable}
+\end{table}
+
+Clients 
+Een client stuurt een \textit{packet} naar de server. 
+
+\section{Praktische implementatie} %Fiks naam nog aub
+
+
+%Subsections: keygen, client, server??
 
 %evt nog \part{Het kraken}?
 \chapter{Cybercriminaliteit}
+
+\section{Verschillende methoden}
+% evt nog subsections?
+\section{Gevolgen voor ons protocol}
 
 \chapter{Quantumcomputers}
 \section{Gevaren}
@@ -64,7 +151,8 @@ Er zijn een aantal onderdelen in de wiskunde die erg belangrijk zijn in de crypt
 \chapter{Discussie en reflectie}
 
 \chapter{***fiks bibliografie nog***}
-%\bibliography{}
+%moet bibliografie niet een hoofdstuk zijn?
+\printbibliography
 
 \chapter{Logboek}
 \section{Otto}
