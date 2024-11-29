@@ -18,7 +18,8 @@
 %   ░██      ░██░   ░░░██ ████████ 
 %   ░░       ░░       ░░ ░░░░░░░░  
 
-\documentclass{report} %fiks nog tekstgrootte, font, etc.
+\documentclass{report} %fiks nog tekstgrootte en regelafstand
+
 \usepackage{graphicx} % Required for inserting images
 \usepackage[left=30mm, top=20mm]{geometry}
 \usepackage[
@@ -26,13 +27,50 @@
     style=apa
     ]{biblatex}
 \usepackage{csquotes}
-\addbibresource{bronnen.bib}
+\usepackage[hidelinks]{hyperref}
+\usepackage{titlepic}
+\usepackage{setspace}
 \usepackage[dutch]{babel}
-\usepackage{textgreek}
-\title{PWS Cryptografie - fiks titel nog!}
-\author{Otto Crawford (6A), Christiaan Tjong Tjin Tai (6B)}
+\usepackage{listings}
+\usepackage{xcolor}
+\definecolor{codeblue}{rgb}{0.23,0.5,0.7}
+\definecolor{codelime}{rgb}{0.65,0.89,0.17}
+\definecolor{codetext}{rgb}{0.97,0.97,0.95}
+\definecolor{codepurple}{rgb}{0.65,0.5,1}
+\definecolor{commentgreen}{rgb}{0.2,0.6,0.2}
+\definecolor{codeyellow}{rgb}{0.91,0.86,0.45}
+\definecolor{codeorange}{rgb}{0.99,0.59,0.13}
+\definecolor{codepink}{rgb}{0.98,0.14,0.45}
+\definecolor{backcolour}{rgb}{0.5,0.5,0.5}
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{codetext},   
+    commentstyle=\color{commentgreen},
+    keywordstyle=\color{codeblue},
+    numberstyle=\tiny\color{backcolour},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+\addbibresource{bronnen.bib}
+\graphicspath{ {./images/} }
+
+\let\code\lstinline
+
+\title{{\huge Maken en kraken}\\\textit{\Large Cryptografie in de praktijk}\\\vspace{1cm}{\includegraphics[width=0.7\textwidth]{images/XKCD.png}}}
+\author{{Otto Crawford (6A), Christiaan Tjong Tjin Tai (6B)}\\ \\{Begeleid door Jennifer Baker, Wiskunde B}}
 \date{\today}
-% We moeten nog vak en begeleider erin gooien maar komt goed (en ook datum in NL fiksen)
+
 \begin{document}
 
 \maketitle
@@ -40,118 +78,616 @@
 \tableofcontents
 
 \chapter{Voorwoord}
+Dit is ons profielwerkstuk: het kroonjuweel van onze middelbare schoolcarrière waar wij met veel trots op zullen terugkijken. Nadat wij hadden besloten om samen ons profielwerkstuk te schrijven, landden wij al gauw op het onderwerp van de cryptografie. Cryptografie was namelijk een zeer divers onderwerp, met zowel een theoretische, wiskundige basis als een praktische codeerkant. Ondanks enkele sporadische hobbels is het hele proces erg soepel verlopen, en wij zijn zeer tevreden met wat wij hebben bereikt. Gedurende dit proces hebben wij echter ook hulp gekregen van getalenteerde en oplettende mensen, die wij nu zullen bedanken.
+\par Wij willen graag mevrouw Baker bedanken voor de begeleiding gedurende ons profielwerkstuk. Zij heeft ontelbare vragen beantwoord en ook de kritische vragen gesteld die soms nodig waren om ons werk goed vorm te geven.
+%\par Mees Daniël Tinus van Zeeland voor het beantwoorden van allerlei vragen over het schrijven over wiskunde.
+\par Evgeny Ilin, die ons het zelfvertrouwen gaf dat wij nodig hadden bij ons profielwerkstuk door ook zelf beroep te doen op onze kunsten.
+\par Philip, Nathan en Laurens, die ons hebben geïnspireerd om zelf ons profielwerkstuk in \LaTeX\,\,te schrijven.
+\par En tenslotte willen wij al onze vrienden en familie bedanken, die onze verhalen hebben aangehoord en ons behulpzame inzichten hebben gegeven, zowel praktisch als theoretisch.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\linewidth]{PWS groepsfoto.jpg}
+    \caption{PWS groepsfoto}
+    \label{fig:PWS_Groepsfoto}
+\end{figure}
 
 \chapter{Samenvatting}
-\section{Samenvatting in het Nederlands}
-\section{Samenvatting in het Engels}
+\section{Samenvatting in het Nederlands} %Otto lees door aub
+In dit profielwerkstuk wordt cryptografie in online computersystemen onderzocht. Allereerst worden enkele definities, conventies en wiskundige concepten vastgesteld die een basis vormen voor het begrijpen van de cryptografie. Vervolgens worden enkele veelgebruikte algoritmes behandeld die in de moderne cryptografie belangrijk zijn.
+\par Een eigen ontwerp van een cryptosysteem komt aan bod als voorbeeld van hoe deze algoritmes in de praktijk kunnen worden gebruikt. De vereisten en implementatie worden uitgelegd, gevolgd door een volledige bespreking van alle code die wordt gebruikt in het uiteindelijke systeem.
+\par Ook enkele methodes om encryptie te kraken worden behandeld. Het gaat hier om cybercriminaliteit, zoals phishing, en de invloed die dit kan hebben op cryptosysteem.
+\par Tenslotte worden de toekomstige cryptografische dreiging van quantumcomputers en enkele manieren om encryptiesystemen hiertegen te beveiligen besproken.
 
+\section{Samenvatting in het Engels}
+This paper is on the subject of cryptography within computer science. In this field, there are many conventions, definitions and mathematical concepts that lay the groundwork for understanding the function that such technologies play in our lives.
+\par After covering this and establishing a baseline, this paper will discuss various common algorithms that make up a large part of modern cryptography. These theoretical concepts will be implemented as a complete cryptographic system to demonstrate practical purpose. 
+\par Aside from considering methods and applications for encrypting, this paper will explore ways in which cryptography can be broken by bad actors and the impact which it may have on our implementation.
+\par Finally, developments are described by considering the changes that quantum computing may bring towards the modern cryptographic algorithms and various ways in which systems are being secured towards them.
 
 \chapter{Inleiding}
+Cryptografie is het beveiligen van berichten tegen afluisteraars. Om een bericht te beveiligen kan je het verbergen, maar wij zullen het \textit{versleutelen} van berichten behandelen. Dit houdt in dat wij mogelijkheden bekijken om berichten zo aan te passen dat een eventuele afluisteraar niet kan achterhalen wat het bericht is, maar de bedoelde ontvanger wel het bericht kan lezen. 
+\par Cryptografie wordt overal in het dagelijks leven gebruikt. Appen met je vriendin, een email sturen naar je baas, inloggen op je Google-account: telkens wordt cryptografie gebruikt om jouw informatie te beschermen van pottenkijkers. Achter al deze cryptografie zit veel wiskunde en programmeren verscholen, volledig uit het zicht van de gewone gebruiker. 
+\par Cryptografie wordt al sinds de oudheid gebruikt voor het beveiligen van gevoelige informatie. Het bekendste voorbeeld uit deze tijd is het Caesarcijfer: alle letters worden drie plaatsen verschoven in het alfabet om een bericht te versleutelen. Mettertijd werden afluisteraars steeds beter in het ontcijferen van berichten en zodoende werd de cryptografie ook alsmaar beter: van het verschuiven van letters naar willekeurige substitutie naar versleuteling met behulp van het bericht zelf. Met de opkomst van de computer werd versleuteling, net als ontcijfering, veel sneller; steeds meer wiskunde werd toegepast om berichten goed en efficiënt te beveiligen.
+\par Moderne, computergedreven cryptografie is een totaal andere wereld dan "traditionele" cryptografie: met de rekenkracht van de moderne computer kunnen er honderden duizenden complexe operaties per seconde worden uitgevoerd, wat vroeger simpelweg onmogelijk was. Maar met vernuftige encryptiemethoden komen op dezelfde manier geavanceerde methoden om cryptografische sleutels te kraken. Dit profielwerkstuk doelt op het onderzoeken van de huidige staat van cryptografie aan de hand van een praktische uitvoering.\\
 
-%evt nog \part{Het maken}?
-\chapter{Wat is cryptografie?}
-%Voelt als een soort inleiding - kan ook daarbij worden gezet; fiks nog aub!
+In dit profielwerkstuk onderzoeken wij de vraag: \textit{Hoe wordt cryptografie gebruikt in online computersystemen?} Deze onderzoeksvraag splitsen wij op in de volgende deelvragen:
+\begin{itemize}
+    \item Welke wiskunde wordt voornamelijk gebruikt in de cryptografie?
+    \item Hoe kan je zelf een eigen encryptieprotocol ontwerpen? %fiks nog iets beter pls
+    \item Hoe kunnen encryptiesystemen gekraakt worden?
+\end{itemize}
+
+\section{Cryptografische definities}
+In dit profielwerkstuk zullen wij de volgende definities hanteren:
+\subsubsection{Asymmetrische cryptografie}
+\textit{Asymmetrische cryptografie} is een type cryptografie waarbij verschillende sleutels worden gebruikt om berichten te versleutelen en te ontcijferen. De sleutel om te versleutelen heet de publieke sleutel of \textit{public key}: deze encryptiemethode wordt daarom ook wel \textit{public key}-cryptografie genoemd. De publieke sleutel is voor iedereen openbaar. De sleutel waarmee wordt ontcijferd heet de privésleutel of \textit{private key}. Deze sleutel is alleen bij de ontvanger van een bericht bekend.
+\subsubsection{Symmetrische cryptografie}
+Bij \textit{symmetrische cryptografie} wordt dezelfde sleutel gebruikt voor het versleutelen en ontcijferen van berichten. De twee partijen hebben dus dezelfde sleutel, die voor niemand anders bekend is.
+\subsubsection{Client en server}
+In online computersystemen is vaak sprake van een relatie tussen twee partijen: een \textit{client} en een \textit{server}. De server is een centrale instantie die communicatie met veel verschillende clients kan onderhouden en met andere servers kan communiceren. De client is een individuele computer en gaat een verbinding aan met de server, die op zijn beurt verzoeken van de client verwerkt.
+\section{Veelgebruikte namen}
+Om een voorbeeld of uitleg simpel en duidelijk te houden, worden in de cryptografie vaak namen gebruikt in plaats van abstracte termen zoals 'zender' of 'ontvanger'. De meest gebruikte namen in de cryptografie zijn de volgende:
+\begin{itemize}
+    \item Alice en Bob: Twee partijen die berichten naar elkaar sturen. Meestal is Alice de zender en Bob de ontvanger.
+    \item Eve: Van het Engelse woord \textit{eavesdropper}, een partij die de communicatie tussen Alice en Bob afluistert.
+    \item Faythe: Van het Engelse woord \textit{faith}, een vertrouwde server die als tussenpersoon kan fungeren voor Alice en Bob.
+\end{itemize}
+
 
 \chapter{Wiskunde in de cryptografie}
 Er zijn een aantal onderdelen in de wiskunde die erg belangrijk zijn in de cryptografie. Met name wiskunde op het gebied van priemgetallen en modulair rekenen is erg belangrijk. Hieronder volgen een aantal definities die wij zullen gebruiken.
 \section{Priemgetallen}
-Een getal is een \textit{priemgetal} als het getal slechts twee delers heeft: 1 en zichzelf. Deze eigenschap maakt priemgetallen uitstekend bruikbaar in de cryptografie. Als je namelijk twee priemgetallen p en q met elkaar vermenigvuldigt, is er slechts één juiste ontbinding van het product: p*q. Het is erg gemakkelijk voor computers om twee priemgetallen met elkaar te vermenigvuldigen, terwijl het juist veel moeilijker is om een product van twee priemgetallen te ontbinden in zijn factoren. Het is bijvoorbeeld triviaal om 11 en 13 te vermenigvuldigen, maar 143 ontbinden in zijn factoren gaat veel moeilijker. In de cryptografie worden echter niet zulke simpele getallen als 11 en 13 gebruikt, maar priemgetallen van honderden cijfers. Dit zorgt ervoor dat het miljarden jaren duurt om het product hiervan te ontbinden in factoren. Dergelijke operaties met priemgetallen kunnen dus worden gebruikt in de cryptografie, aangezien ze niet gemakkelijk kunnen worden omgekeerd.
+Een getal is een \textit{priemgetal} als het getal slechts twee delers heeft: 1 en zichzelf. Deze eigenschap maakt priemgetallen uitstekend bruikbaar in de cryptografie. Als je namelijk twee priemgetallen \textit{p} en \textit{q} met elkaar vermenigvuldigt, is er slechts één juiste ontbinding van het product: $p \cdot q$. Het is erg gemakkelijk voor computers om twee priemgetallen met elkaar te vermenigvuldigen, terwijl het juist veel moeilijker is om een product van twee priemgetallen te ontbinden in zijn factoren. Het is bijvoorbeeld triviaal om 11 en 13 te vermenigvuldigen, maar 143 ontbinden in zijn factoren gaat moeilijker. In de cryptografie worden echter niet zulke simpele getallen als 11 en 13 gebruikt, maar priemgetallen van honderden cijfers. Dit zorgt ervoor dat het miljarden jaren duurt om het product hiervan te ontbinden in factoren. Dergelijke operaties met priemgetallen kunnen dus worden gebruikt in de cryptografie, aangezien ze niet gemakkelijk kunnen worden omgekeerd.
 
 \section{Grootste gemene deler}
 De \textit{grootste gemene deler} (ggd) van twee getallen, zoals de naam zegt, laat zien wat de grootste deler is die twee getallen gemeen hebben. Deze kan verkregen worden door te kijken naar de priemfactorontbinding van beide getallen: de ggd is het product van alle priemfactoren die in beide ontbindingen voorkomen. Als de ggd van twee getallen 1 is, oftewel ze hebben geen priemfactoren gemeen, dan noemen we deze twee getallen \textit{copriem}.
 
 \section{Modulair rekenen}
-\textit{Modulair rekenen} is een vorm van rekenen waarbij elk getal een waarde krijgt tussen 0 en de modulo, \textit{n}. Deze waarde is gelijk aan de rest die overblijft wanneer het getal door n gedeeld wordt. 11 mod 4 is bijvoorbeeld 3, omdat 11/4 = 2 rest 3. In de cryptografie wordt modulo rekenen veel gebruikt. Het zorgt er namelijk voor dat bewerkingen van berichten in veel public key-cryptosystemen mogelijk worden gemaakt. 
+\textit{Modulair rekenen} is een vorm van rekenen waarbij elk getal een waarde krijgt tussen 0 en de modulus, \textit{n}. Deze waarde is gelijk aan de rest die overblijft wanneer het getal door n gedeeld wordt. $11 \,\,mod\,\, 4$ is bijvoorbeeld 3, omdat $11/4 = 2$ rest $3$. In de cryptografie wordt modulair rekenen veel gebruikt. Het zorgt er namelijk voor dat bewerkingen van berichten in veel \textit{public key}-cryptosystemen mogelijk worden gemaakt. 
 
 \section{Inverse}
-Bij modulair rekenen is de \textit{inverse} van een getal \textit{a} in modulo \textit{n} het getal \textit{b} waarvoor geldt: \begin{equation}{a \cdot b \, mod \, n = 1}\end{equation} Niet alle getallen hebben echter inverses in een bepaalde modulo. Een getal \textit{a} heeft alleen een inverse in modulo \textit{n} wanneer geldt dat \textit{a} en \textit{n} copriem zijn. Het totaal aantal getallen dat een inverse heeft in een bepaalde modulo, wordt \textphi \, genoemd. Voor een modulo \textit{n} die het product is van twee priemgetallen \textit{p} en \textit{q} geldt altijd: \begin{equation} \varphi = (p-1)(q-1) \end{equation}.
+Bij modulair rekenen is de \textit{inverse} van een getal \textit{a} in modulo \textit{n} het getal \textit{b} waarvoor geldt: 
+\begin{equation}(a \cdot b) \, mod \, n \equiv 1\end{equation}
+Niet alle getallen hebben echter inverses in een bepaalde modulo. Een getal \textit{a} heeft alleen een inverse in modulo \textit{n} wanneer geldt dat \textit{a} en \textit{n} copriem zijn. Het totaal aantal getallen dat een inverse heeft in een bepaalde modulo, wordt $\varphi$ genoemd. Voor een modulo \textit{n} die het product is van twee priemgetallen \textit{p} en \textit{q} geldt altijd\footnote{Dit is triviaal te bewijzen.}: 
+\begin{equation} \varphi = (p-1)(q-1) \label{phieq} \end{equation}
 
 
-\chapter{Verschillende algoritmes} % -> cryptografische primitieven
-\section{Priemgetallen genereren}
-
-\section{Diffie-Hellman???}
+\chapter{Cryptografische primitieven}
+Een compleet cryptosysteem is een systeem dat bestaat uit veel verschillende kleinere algoritmes, die elk een verschillende functie hebben. Dit kan het uitwisselen van sleutels of het versleutelen van berichten zijn. Deze algoritmes worden \textit{cryptografische primitieven} genoemd. In dit hoofdstuk zullen wij enkele cryptografische primitieven behandelen die belangrijk zijn voor ons eigen protocol.
+\section{Miller-Rabin test}
+In de cryptografie is het genereren van (grote) priemgetallen een erg belangrijke taak: priemgetallen worden in tal van algoritmes gebruikt. De bekendste manier om priemgetallen te genereren, is door middel van de Miller-Rabin test. Deze test kan met grote zekerheid zeggen of een willekeurig getal wel of niet priem is. In pseudocode werkt de test als volgt:
+\begin{enumerate}
+    \item Kies een willekeurig oneven getal \textit{n}, met $n \geq 3$, en een parameter $t \geq 1$.
+    \item Schrijf \textit{n-1} als $2s \cdot r$ op zo’n manier dat \textit{r} oneven is.
+    \item Doe het volgende voor $i$ van 1 tot en met $t$:
+    \begin{itemize}
+        \item Kies een willekeurig getal $a$ met $2 \leq a \leq n-2$
+        \item Bereken $y = a^r \,mod\, n$
+        \item Als $y \neq 1 \wedge y \neq n-1$:
+        \begin{itemize}
+            \item $j$ = 1
+            \item Voor $j<s$ en $y \neq n-1$:
+            \begin{itemize}
+                \item $y = y^2\, mod\, n$
+                \item Als $y = 1$: $n$ is samengesteld, test klaar
+                \item $j = j+1$
+            \end{itemize}
+            \item Als $y \neq n-1$: $n$ is samengesteld, test klaar
+        \end{itemize}
+    \end{itemize}
+    \item $n$ is priem
+\end{enumerate}
+Hiermee is het mogelijk om te testen of een getal priem is. Een getal $a$ dat zegt dat $n$ samengesteld is, heet een \textit{strong witness}: als dit de uitkomst is, is namelijk bewezen dat $n$ samengesteld is. Een getal $a$ dat zegt dat $n$ priem is, heet een \textit{strong liar}: hiermee heb je nog geen uitsluitsel of $n$ priem is of niet. Het is echter zo dat voor elk oneven samengesteld getal $n$ hoogstens $\frac{1}{4}$e van alle mogelijke $a$’s een \textit{strong liar} is. Door de test dus met genoeg getallen uit te voeren, is het vrijwel volledig zeker dat samengestelde getallen worden uitgefilterd. De kans dat een samengesteld getal als priem wordt bestempeld, is gelijk aan $(\frac{1}{4})^t$, aangezien we de test $t$ keer uitvoeren. De waarde van $t$ is meestal 64 of 128, wat het bijna onmogelijk maakt dat een samengesteld getal als priem uit de test komt.\footnote{\cite{handbook_crypto} 138-140.}
 
 \section{RSA}
+Het Rivest-Shamir-Adlemanalgoritme, beter bekend als RSA, is een van de meest bekende \textit{public-key} encryptiealgoritmes ter wereld. De veiligheid van het algoritme berust op het feit dat het veel makkelijker is om twee priemgetallen $p$ en $q$ met elkaar te vermenigvuldigen dan om het product $pq$ te ontbinden in zijn factoren. Aangezien RSA gebruik maakt van asymmetrische cryptografie, worden twee sleutels gemaakt. De sleutels worden als volgt gegenereerd:
+\begin{enumerate}
+\item Kies twee willekeurige priemgetallen $p$ en $q$, allebei van een paar honderd cijfers lang. Bereken het product $n$ van deze priemgetallen, evenals $\varphi$ volgens vergelijking \ref{phieq}. 
+\item Kies een willekeurig getal $e$ met $3\leq e \leq \varphi$, waarbij $e$ en $\varphi$ copriem zijn. Bereken de inverse van $e$ modulo $\varphi$. Noem dit getal $d$.
+\item Vernietig $p$, $q$ en $\varphi$.
+\item De publieke sleutel is vervolgens ($e$, $n$) en de privésleutel is ($d$, $n$).
+\end{enumerate}
+Stel, Alice wil een bericht $a$ naar Bob sturen, dat versleuteld is door middel van RSA. Bob heeft een publieke sleutel ($e$, $n$) en een privésleutel ($d$, $n$). Om het bericht te versleutelen, berekent Alice $A = a^e\, mod\, n$. Wanneer Bob vervolgens het bericht wil ontcijferen, berekent Bob $a = A^d\, mod\, n$. Dit werkt, omdat voor $n=pq$ met $p$ en $q$ priemgetallen geldt\footnote{\cite{hellman_crypto}.}: 
+\begin{equation}
+    a^{k\varphi(n)+1}\, mod\, n \equiv a
+\end{equation} 
+Op deze manier weten zowel Alice en Bob de inhoud van het bericht, terwijl eventuele meekijkers alleen maar willekeurige getallen kunnen zien: zij zouden een privésleutel moeten hebben om het bericht te kunnen lezen, die zij niet hebben.\footnote{\cite{cryptografie} 63-64.}
 
 \section{Digital signatures}
-
-%\section{AES}???
+Wanneer iemand wil kunnen bewijzen dat hij daadwerkelijk een bepaald bericht heeft geschreven, kan hij gebruikmaken van een \textit{digital signature}. Voor een \textit{digital signature} kan je veel verschillende algoritmes gebruiken; hier volgt een voorbeeld van een \textit{digital signature} dat RSA gebruikt.
+\par Als Alice een bericht naar Bob wil sturen, maar Bob moet zeker weten dat het bericht echt van Alice komt, doet Alice het volgende: ze versleutelt het bericht met haar eigen privésleutel en met Bobs publieke sleutel. Wanneer Bob het bericht ontvangt, kan hij het ontcijferen met zijn eigen privésleutel en Alices publieke sleutel. Op deze manier weet hij zeker dat het bericht van Alice komt, aangezien niemand anders haar privésleutel kent en het bericht dus ook niet daarmee kan versleutelen. Bovendien kan geen tussenpersoon het bericht hebben gelezen, omdat het ook met Bobs publieke sleutel was versleuteld.\footnote{\cite{cryptografie} 65-66.}
 
 \section{Hashing}
+Een \textit{hashingalgoritme} is een programma dat een input van arbitraire lengte in een waarde van vaste lengte kan omzetten, oftewel een \textit{hash}. Deze functie kan maar één kant op worden uitgevoerd, en elke aanpassing, hoe klein dan ook, in de input verandert de uitkomst van het algoritme volledig. Hashing wordt vaak toegepast om de inhoud van bestanden te verifiëren: als ook maar één bit niet klopt, is de hash volledig anders en is de integriteit van het bestand geschonden. In de cryptografie worden hashfuncties gebruikt om de inhoud van berichten te kunnen controleren. De ontvanger van een bericht kan een hash maken van het bericht en kijken of die overeenkomt met de verzonden hash. Als de hashes overeenkomen, klopt de inhoud van het bericht; als ze verschillend zijn, is het ontcijferde bericht onjuist.\footnote{\cite{hashing}.}
 
 \chapter{Een eigen protocol}
-Dit hoofdstuk betstaat uit twee delen: een omschrijving en de vereisten van het theoretische cryptosysteem \footnote{Moet ik dit definiëren?} en een uitleg van de implementatie hiervan in python.
+Dit hoofdstuk bestaat uit drie delen: een omschrijving en de vereisten van het theoretische cryptosysteem, een uitleg van de implementatie hiervan in Python en een volledige behandeling van de geschreven code.
 
-\section{Vereisten en implementatie}
-Als eisen voor het cryptosysteem zijn de volgende punten vastgesteld:
+\section{Ontwerpprincipes}
+We hebben een protocol ontwikkeld met als doel om te werken als beveiliging voor een simpel berichtenplatform. Hieruit volgen een paar implicaties om te overwegen bij het ontwerpen:
 \begin{itemize}
-    \item Alle data wordt opgeslagen op een centrale server: \textit{geen} P2P\footnote{P2P: \textit{peer to peer}, betekent dat er een netwerk is van computers, zonder een hierarchie. Denk aan torrents.} communicatie.
-    \item Privacy wordt gemaximaliseerd. Zoveel mogelijk informatie moet geheim gehouden worden.
-    \item Zoveel mogelijk algoritmen worden zelf geïmplementeerd.
+    \item Alle data wordt opgeslagen en gedistribueerd door een centrale server.
+    \item Privacy wordt gemaximaliseerd. Zoveel mogelijk informatie, bijvoorbeeld de ontvanger van het bericht, moet geheim gehouden worden.
+    \item Berichten die gestuurd worden zijn redelijk klein, dus efficiëntie is niet een belangrijke factor bij het uitkiezen van cryptografische algoritmen.
+    \item Het moet mogelijk zijn om naar elke deelnemer een bericht te sturen zonder meer voorbereiding uit te voeren dan het selecteren van de gewenste ontvanger.
 \end{itemize}
 
+Op basis van deze criteria zijn er al meteen een paar keuzes duidelijk. Aangezien elke deelnemer elke andere deelnemer moet kunnen bereiken, is symmetrische cryptografie niet mogelijk. In dat geval zijn er namelijk voor een netwerk met $n$ deelnemers $n \choose 2$ sleutels die gemaakt en opgeslagen moeten worden en moet elke deelnemer zelf $n-1$ sleutels beheren. Op kleine schaal is dit niet een al te groot probleem, maar de hoeveelheid sleutels groeit exponentieel met het aantal deelnemers: met slechts 1 000 deelnemers zijn er al 500 000 sleutels nodig. 
+\par Dit betekent dat er bij nieuw contact een nieuwe sleutel aangemaakt moet worden, als symmetrische cryptografie gebruikt wordt. Als deze sleutel niet hergebruikt wordt, dan wordt het probleem van te veel sleutels ontweken. Maar het is niet mogelijk om sleutels voor symmetrische cryptografie via onbeveiligde kanalen te verspreiden.
+\par Er is dus voor deze en vrijwel elke moderne gebruikssituatie een vorm van asymmetrische cryptografie nodig om ofwel zelf de berichten te versleutelen ofwel het verspreiden van een efficiëntere\footnote{Symmetrische cryptografie is ordes van grootte sneller dan asymmetrische cryptografie.} symmetrische sleutel te faciliteren. Aangezien efficiëntie als een niet al te belangrijke factor geïdentificeerd is, is het niet nodig om symmetrische cryptografie te gebruiken. Het systeem zal dus uitsluitend gebruik maken van asymmetrische cryptografie.
+
 \section{Cryptosysteem}
-Het cryptosysteem dat uiteindelijk is gekozen kan samengevat worden met het volgende diagram: \\
-%
-%
-%   MAAK DIAGRAM
-%
-%
-Clients worden een server aangewezen. Elke server heeft een bepaalde hoeveelheid. Hoe meer, hoe veiliger, maar hoe meer onnodige data opgeslagen wordt. Praktische tests zijn nodig om de juiste balans hiertussen te vinden.
-\subsection{Stuur-systeem}
+Het cryptosysteem dat uiteindelijk is gekozen kan worden samengevat in figuur \ref{fig:protocol}:
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\linewidth]{images/PWS_diagram.png}
+    \caption{Schematische weergave van het protocol}
+    \label{fig:protocol}
+\end{figure}\\
+Het protocol bestaat uit uit drie stappen: Het registreren bij Faythe, het voorbereiden van een bericht en het sturen ervan (het stuur-systeem: Alice $\rightarrow$ Faythe) en het ontvangen en interpreteren van het bericht (het ontvang-systeem: Faythe $\rightarrow$ Bob).
+
+\subsection{Registreersysteem}
 \begin{enumerate}
-    \item Een client stelt een bericht op om naar de server te sturen.
-    \item Als eerste wordt de volgende informatie vastgesteld: verzendingstijd, gehashte bericht, bericht, ID van de client.
-    \item Het bericht wordt versleuteld met RSA via de \textit{public key} van de ontvanger
-    \item De hash wordt versleuteld met de \textit{private key} van de zender, waardoor het bericht getekend wordt.
+    \item Alice, Bob en Faythe berekenen allemaal een sleutelpaar en delen de publieke sleutel met Faythe.
+    \item Als Faythe een publieke sleutel ontvangt slaat ze de sleutel op met de naam van de zender eraan gekoppeld zodat ze deze gemakkelijk kan opzoeken.
 \end{enumerate}
 
-\subsection{Ontvang-systeem}
+\subsection{Stuursysteem}
 \begin{enumerate}
-    \item Elke paar seconden doet de client een check om te kijken of er nieuwe berichten zijn. Als dit zo is, worden ze opgeslagen.
-    \item Een nieuw bericht wordt ontcijferd met de \textit{private key} van de ontvanger. De hash wordt ontcijferd met de public key geassocieerd met de ID die gestuurd is met het bericht.
-    \item Nu wordt de integriteit van het bericht geverifieerd: door te kijken of de hash van het bericht hetzelfde is als de hash die zojuist ontsleuteld is, kan bepaald worden of het bericht wel of niet juist is (zie figuur \ref{tab:send_receive_truthtable}). Op deze manier kan het bericht alleen worden aangenomen als de zender eerlijk is over wie hij is en de ontvanger degene is die de zender bedoelde.
+    \item Alice schrijft een bericht om naar Bob te sturen. Ze bepaalt meteen de hash en de verzendtijd van dit bericht.
+    \item Ze vraagt Faythe wat de publieke sleutel van Bob is en versleutelt haar bericht hiermee. Nu kan alleen Bob het met zijn privésleutel ontcijferen.
+    \item Ze versleutelt de hash van haar bericht met haar eigen privésleutel. De hash wordt nu de oorspronkelijke waarde als haar publieke sleutel wordt gebruikt om de hash te ontcijferen. Dit fungeert als een digitale handtekening en garandeert dat het geschreven is door Alice
+    \item Nu stuurt ze haar versleutelde bericht, de verzendtijd en haar digitale handtekening naar Faythe met haar naam erop "geplakt".
+    \item Faythe slaat dit op en voegt dit toe aan een lijst.
+\end{enumerate}
+
+\subsection{Ontvangsysteem}
+\begin{enumerate}
+    \item Elke paar seconden doet Bob een check bij Faythe om te kijken of er nieuwe berichten zijn. Als dit zo is, worden ze opgeslagen.
+    \item Een nieuw bericht wordt ontcijferd met de \textit{private key} van Bob. De hash wordt ontcijferd met de \textit{public key} geassocieerd met de ID die gestuurd is met het bericht, in dit geval die van Alice.
+    \item Nu wordt de integriteit van het bericht geverifieerd: door te kijken of de hash van het bericht hetzelfde is als de hash die zojuist ontsleuteld is, kan bepaald worden of het bericht wel of niet juist is (zie figuur \ref{tab:send_receive_truthtable}). Op deze manier kan het bericht alleen worden aangenomen als Alice eerlijk is over wie zij is en Bob degene is die Alice bedoelde.
 \end{enumerate}
 
 \begin{table}[htp]
     \centering
     \begin{tabular}{p{3cm}|p{5cm}|p{5cm}}
-                        & Bedoelde ontvanger & Onbedoelde ontvanger \\ \hline
-         Andere zender dan geclaimd & hash ontcijferd met verkeerde \textit{public key}, bericht ontcijferd met verkeerde \textit{private key}. Hash en bericht komt niet overeen en het bericht is wartaal $\Rightarrow$ wordt weggegooid. & hash ontcijferd met verkeerde \textit{public key} $\Rightarrow$ zelf berekende hash is niet geleverde hash. Bericht is niet integer en wordt weggegooid \\ \hline
-         Zender integer & Hash correct ontcijferd, bericht correct ontcijferd, het deterministische hashing algoritme zorgt ervoor dat de berekende hash hetzelfde is als de gestuurde hash. Bericht in orde en wordt opgeslagen. & Hash wordt met de correte \textit{public key} ontsleuteld. Het bericht wordt ontcijferd met de verkeerde private key $\Rightarrow$ het bericht wordt gelezen als wartaal en de berekende hash komt niet overeen met de geleverde hash.\\
+    & Bedoelde ontvanger & Willekeurige luisteraar \\ \hline
+    Zender is wie hij claimt te zijn & Hash word ontcijferd met de juiste publieke sleutel, bericht wordt ontcijferd met de juiste privésleutel. Alles in orde. & Hash word ontcijferd met de juiste publieke sleutel, bericht wordt ontcijferd met de verkeerde privésleutel. Bericht wordt wartaal, gegeven hash komt niet overeen met de zelf berekende hash. \\ \hline
+    Zender liegt over zijn identiteit & Hash word ontcijferd met de verkeerde publieke sleutel, bericht wordt ontcijferd met de juiste privésleutel. Hoewel het bericht leesbaar is, is de gegeven hash anders dan de zelf berekende hash, dus het bericht is onbetrouwbaar. & Zowel de hash als het bericht worden met de verkeerde sleutel ontcijferd, dus zowel het bericht als de hash worden wartaal en willekeurige data. Niets zinnigs uit op te maken. \\
     \end{tabular}
-    \caption{Caption}
+    \caption{Veiligheid bij situaties}
     \label{tab:send_receive_truthtable}
 \end{table}
 
-Clients 
-Een client stuurt een \textit{packet} naar de server. 
+\newpage
+\section{Praktische implementatie}
+Er zijn een paar subtiele verschillen tussen het theoretische systeem en de implementatie. 
+\par Alice wordt een \textit{client} en Faythe wordt een \textit{server}. In plaats van het sturen van een bericht, worden er \textit{packets} gestuurd die alle data bevatten. Deelnemers vragen niet om informatie, maar laden elke paar seconden de huidige staat van het netwerk in door in de achtergrond verzoeken naar de server te doen.
+\par De code is in een paar delen verdeeld: het generen van grote priemgetallen, cryptografische functies voor en- en decryptie, het interpreteren van de opdrachten van de gebruiker en het regelen van de server. 
 
-\section{Praktische implementatie} %Fiks naam nog aub
+\subsection{Miller-Rabin test}
+Deze code, opgeslagen in \code{primes.py} zorgt voor het genereren van grote priemgetallen.
+\begin{lstlisting}[language=Python]
+import math
+from gmpy2 import powmod
+from random import randint
+import time
 
+def isDiv(num, div):
+    return (num // div) * div == num
 
-%Subsections: keygen, client, server??
+def isOdd(num):
+    return (num % 2 == 1)
 
-%evt nog \part{Het kraken}?
+def twoSD(num):
+    i = 1
+    D = (num-1) // 2
+    while not isOdd(D):
+        D //= 2
+        i+=1
+    S = i
+    ##print(num, (2**S)*D+1)
+    #print(num, S, D)
+    return (int(S), int(D))
+\end{lstlisting}
+Hier worden een aantal functies geïmporteerd en andere functies gedefinieerd. De functie \code{powmod} is een versie van de standaardfunctie \code{pow}, die een stuk sneller is.\footnote{Tijdens een analyse van de looptijd van het programma viel op dat veruit de meeste (meer dan 90\%) tijd zat in de standaardfunctie \code{pow}. Het bleek dat de functie \code{gmpy2.powmod} ongeveer tien keer zo snel werkte. Dit zorgde ervoor dat het programma in het algemeen ongeveer tien keer zo snel werkte en was een significante optimalisatie. } \code{powmod(a,b,n)} is gelijk aan $a^b\,\, mod\,\, n$. Met \code{randint(a, b)} worden willekeurige gehele getallen gekozen tussen $a$ en $b$, die als kandidaat-priemgetallen dienen. De functies \code{isDiv}, die de waarde \code{True} geeft als \code{num} deelbaar is door \code{div} en \code{isOdd}, die \code{True} geeft als het oneven is, zijn functies die verder in het programma voor verschillende onderdelen worden gebruikt. De functie \code{twoSD} is het eerste deel van de Miller-Rabin test: het omschrijven van $n-1$ naar $2^s\cdot r$ met een oneven $r$.\footnote{In plaats van $r$ wordt soms de letter $d$ gebruikt, vandaar de naam van de functie, $2sd$} Deze functie geeft twee waarden in een lijst: $s$ en $r$\\
+
+\begin{lstlisting}[language=Python, firstnumber=22]
+def sieveCheck(num, trials=25):
+    primeTable = [2, 3, 5, 7, 11, ... , 997] # alle priemgetallen tot 1000
+    for i in range(0, trials):
+        if isDiv(num, primeTable[i]):
+            return False
+    return True
+\end{lstlisting}
+De functie \code{sieveCheck} helpt om het programma sneller te laten verlopen. Door te kijken of een kandidaat door een van de kleine priemgetallen deelbaar is, kunnen veel samengestelde getallen al meteen worden uitgefilterd. Door middel van de variabele \code{trials} kan worden bepaald met hoeveel verschillende priemgetallen deelbaarheid wordt gecontroleerd. De standaardwaarde is 25. Getallen die niet door de test komen, hoeven daarna niet meer aan de gehele Miller-Rabin test te worden onderworpen, wat rekenkracht bespaart en het programma sneller maakt.\\
+
+\begin{lstlisting}[language=Python, firstnumber=28]
+def isPrime(num, iterations=64, trials=25):
+    if not sieveCheck(num, trials=25):
+        return False
+    for i in range(0, iterations):
+        #print(i)
+        a = randint(2, num - 2) # generate A
+        num_rewrite = twoSD(num)
+        y = powmod(a, num_rewrite[1], num)
+        #print(y)
+        if y != 1 and y != num-1:
+            j = 1
+            while j <= (num_rewrite[0]-1) and y != num-1:
+                #print(j)
+                y = pow(y, 2, num)
+                #print(y)
+                if y == 1:
+                    #if i != 0: print(i)
+                    return False
+                j = j+1
+            if y != num-1:
+                #if i != 0: print(i)
+                return False
+    #print(i)
+    return True
+\end{lstlisting}
+De bovenstaande functie voert de Miller-Rabin test daadwerkelijk uit, zoals beschreven in hoofdstuk 5.1. Let op dat \code{num_rewrite[0]} $s $ en \code{num_rewrite[1]} $r$ is na het herschrijven van het getal. De variabele \code{iterations} is de implementatie van de veiligheidsparameter $t$. De variabele \code{trials} wordt alleen maar aan \code{sieveCheck} doorgegeven. Het getal dat onderzocht wordt, is \code{num}.\\
+
+\begin{lstlisting}[language=Python, firstnumber=52]
+def primeGen(bits=256, iterations=128, trials=25):
+    #print(twoSD(48112959837082048697))
+    found = False
+    while not found:
+        prime_candidate = randint(3, pow(2, bits-1))*2-1
+        found = isPrime(prime_candidate, trials=25)
+        #print("uh")
+    return prime_candidate
+\end{lstlisting}
+De functie \code{primeGen} past de Miller-Rabin test toe om priemgetallen daadwerkelijk te genereren. De bits-parameter maakt het mogelijk om te kiezen hoe groot het priemgetal moet zijn, waarbij de maximale waarde gelijk is aan $2^n$ met $n$ het aantal bits.
+
+\subsection{Cryptografische functies}\label{Crypt_Functions}
+\begin{lstlisting}[language=Python]
+import os
+import primes
+from math import gcd
+from random import randint
+from dotenv import load_dotenv, set_key
+from pathlib import Path
+
+# .env prefab
+env_path = Path(".env")
+env_path.touch(mode=0o600, exist_ok=True)
+load_dotenv()
+\end{lstlisting}
+Alle functies met betrekking tot de Miller-Rabin test worden geladen in regel 2: \code{import primes}. Enkele al behandelde functies worden hierna geladen in de opeenvolgende regels. Daarna wordt er een bestand geleden genaamd \code{.env}. Dit ziet er meestal zo uit (zie onderstaande):\\
+\begin{lstlisting}
+MOD_CLASS='843867...'
+PUBKEY='630590...'
+PRIVKEY='214550...'
+\end{lstlisting}
+Deze implementatie van sleutelopslag is optimaal. Bij distributie wordt er geen \code{.env}-bestand geleverd en bij de eerste executie wordt het gemaakt. Zo blijven de sleutels veilig maar ook beschikbaar. Hiervoor worden de functies \code{load_dotenv} en \code{setkey} geïmporteerd. Deze laden opgeslagen sleutels en schrijven nieuwe sleutels naar het bestand.
+
+\begin{lstlisting}[language=Python, firstnumber=31]
+# Generate keys
+def keygen_RSA():
+    p1 = primes.primeGen(bits=1024)
+    p2 = primes.primeGen(bits=1024)
+    n = p1*p2
+    set_key(dotenv_path=env_path, key_to_set="MOD_CLASS", value_to_set=str(n))
+
+    phi = (p1-1)*(p2-1)
+
+    while 1:
+        e = randint(3, phi)
+        if gcd(e, phi) == 1:
+            break
+
+    d = pow(e, -1, phi)
+
+    set_key(dotenv_path=env_path, key_to_set="PUBKEY", value_to_set=str(e))
+    set_key(dotenv_path=env_path, key_to_set="PRIVKEY", value_to_set=str(d))
+\end{lstlisting}
+Hier wordt een functie voor het genereren van de RSA-sleutels opgesteld. De priemgetallen worden verkregen door de eerder beschreven code voor de Miller-Rabin test uit te voeren. De priemgetallen hebben beide een lengte van 1024 bits. Omdat de sleutels als maximum de grootte van het product van de twee priemgetallen hebben, is de grootte van deze sleutels gelijk $2\cdot1024$ bits: dit programma heeft een sleutelgrootte van 2024 bits.\\
+
+\begin{lstlisting}[language=Python, firstnumber=50]
+# if the .env is _not_ present, generate it.
+if not os.getenv("MOD_CLASS") or not os.getenv("PUBKEY") or not os.getenv("PRIVKEY"):
+    keygen_RSA()
+\end{lstlisting}
+Dit stuk code zorgt dat de functie hiervoor wordt uitgevoerd als de sleutels nog niet bestaan.\\
+
+\begin{lstlisting}[language=Python, firstnumber=54]
+def to_int(ascii_str):
+    values_pre = [ord(letter) for letter in ascii_str]
+    values = [str(val).zfill(3) for val in values_pre]
+    for i in values:
+        ascii_int = int(''.join(map(str, values)))
+    return ascii_int
+
+def to_ascii(decr_int):
+    values = []
+    while decr_int>0: 
+        remainder = decr_int%1000
+        values.append(remainder)
+        decr_int = decr_int//1000
+    values.reverse()
+    letters = [chr(ascii) for ascii in values]
+    decr_msg = ''.join([str(ascii) for ascii in letters])
+    return decr_msg
+\end{lstlisting}
+Deze twee functies maken het mogelijk om tekst om te zetten tot een getal, waar RSA-encryptie op kan worden uitgevoerd, en om een ontcijferd getal om te zetten naar letters. Om er een getal van te maken, wordt het bericht opgesplitst in de individuele letters. De letters worden vervolgens omgezet naar hun ASCII-waarden. Deze getallen worden, indien nodig, met nullen aan de voorkant tot 3 cijfers aangevuld en daarna aan elkaar geplakt. 
+\par Andersom wordt een ontcijferd getal in blokjes van 3 cijfers geknipt. De blokjes staan dan in omgekeerde volgorde en worden dus omgerdaaid. Daarna wordt elke ASCII-waarde omgezet tot de juiste letter en worden de letters aan elkaar geplakt.
+\par Dit stuk zet letters en cijfers dus naar elkaar om.\\
+
+\begin{lstlisting}[language=Python, firstnumber=73]
+def encrypt_RSA(message, base=int(os.getenv("PUBKEY")), modulo=int(os.getenv("MOD_CLASS"))):
+    return pow(message, base, modulo)
+
+# Works the same as encrypting with a private key.
+def decrypt_RSA(message):
+    base = int(os.getenv("PRIVKEY"))
+    modulo = int(os.getenv("MOD_CLASS"))
+    decr_int = pow(message, base, modulo)
+    return decr_int
+\end{lstlisting}
+Deze twee functies zorgen voor het echte versleutelen en ontcijferen met RSA. De eerste functie vraagt de publieke sleutel en modulo van de ontvanger aan de server, en versleutelt vervolgens het bericht daarmee. De tweede functie zoekt de eigen privésleutel en modulo om een bericht vervolgens te ontcijferen. Opmerkelijk is dat de handeling voor een digitale handtekening precies hetzelfde is als de handeling voor een decriptie: beiden maken gebruik van \code{pow(input, PRIVKEY, MOD_CLASS)} met als \code{PRIVKEY} en \code{MODCLASS} de waardes van de client zelf. Hetzelfde geldt voor het valideren van een handtekening: encryptie met de publieke sleutel van een andere gebruiker is precies hetzelfde als decryptie van een handtekening (die dus versleuteld is met de privésleutel van de andere gebruiker). 
+% Christiaan: lees het bovenstaande AUB.
+
+\subsection{Client} %Otto fiks pls
+Het gedeelte van de code die de client regelt bestaat uit twee delen.
+\begin{enumerate}
+    \item Een deel van de code is altijd actief en wacht op invoer van de gebruiker. Als het dit ontvangt wordt het bericht versleuteld en naar de server gestuurd
+    \item Het andere deel van de code checkt elke seconde of de server nieuwe gebruikers en/of berichten heeft. Als dit het geval is wordt het toegevoegd aan een interne database waarna berichten ontcijferd en afgebeeld worden, mits ze gedetermineerd zijn als correct.
+\end{enumerate}
+
+\begin{lstlisting}[language=python]
+#!/usr/bin/env python3
+import requests
+import os
+import multiprocessing
+import time
+from datetime import datetime
+from math import floor
+from hashlib import sha256
+from random import randint
+import cryptils
+from pathlib import Path
+from funcy import join
+\end{lstlisting}
+Hier worden simpelweg alle nodige functies geïmporteerd. \code{requests} om verzoeken aan de server te kunnen doen, \code{os} om te kunnen werken met de waarden in het \code{.env} bestand, \code{multiprocessing} om in de achtergrond elke paar seconden te kunnen communiceren met de server, \code{time} om vertragingen te kunnen starten, \code{datetime} om het exacte moment van het versturen te kunnen noteren, \code{sha256} om een hash van het bericht te vinden, \code{randint} voor het bedenken van een gebruikersnaam tijdens het opstarten en \code{cryptils} om gebruik te kunnen maken van alle zojuist behandelde cryptografische functies.
+\par De code die zal volgen zal niet in volgorde van regelnummer zijn, maar in volgorde van toepassing.
+
+\subsubsection{Stuursysteem}
+
+\begin{lstlisting}[language=Python, firstnumber=101]
+if __name__ == '__main__':
+
+    # userID for identification purposes
+    global userID
+    userID = randint(0, 10000)
+
+    # connect and register to server
+    register_info = {
+            userID: [
+                int(os.getenv("PUBKEY")),
+                int(os.getenv("MOD_CLASS"))
+            ]
+    }
+    requests.post(url="http://localhost:5000/register", json=register_info)
+
+    # Allowing objects to be shared between threads
+    manager = multiprocessing.Manager()
+    ns = manager.Namespace()
+    ns.user_arr = []
+
+    # multithreading boilerplate
+    procname = multiprocessing.Process(target=update, name="proc 1")
+    procname.daemon = True
+    procname.start()
+    #procname.join()
+
+    print(userID)
+    while True:
+        inp = input("cryptsystem01 ~$ ")
+        if inp == "q" or inp == "quit":
+            exit()
+        tokenized_inp = inp.split("+")
+        print(tokenized_inp)
+        send(tokenized_inp[1], tokenized_inp[0])
+\end{lstlisting}
+Dit is het gedeelte van de code dat alles anders begint en aanstuurt. Regel 101 zorgt er alleen voor dat de code alleen wordt uitgevoerd wordt als het programma direct aangestuurd wordt, niet als het geïmporteerd wordt.
+\par Om te beginnen wordt registratie uitgevoerd. Er wordt een willekeurige gebruikersnaam gekozen en hieraan wordt de publieke sleutel en de modulusklasse gekoppeld. Dit wordt als JSON\footnote{Moet ik iets zeggen hier?} naar de server gestuurd op \code{http://localhost:5000/register}.
+\par Vervolgens wordt er een process gestart dat los werkt van het huidige proces maar data kan uitwisselen door te schrijven of te lezen van de lijst \code{ns.user_arr}. Op regel 122 wordt er gedefinieerd met \code{target=update} gedefinieerd dat het achtergrondproces de functie \code{update} (\ref{stuur_code}) zal uitvoeren (op regel 77). Deze functie regelt de ontvangst en interpretatie van berichten.
+\par Tussen regel 128 en regel vind 134 is het programma het meest van de tijd. Hier wordt er met \code{input} gewacht op de invoer van de gebruiker, wordt het programma stop gezet als de gebruiker \code{q} of \code{quit} typt en wordt de invoer opgesplitst in argumenten, waarbij een + een volgend argument aanduid. Het eerste argument is de ontvanger en het tweede argument is het bericht, in tekst. Deze argumenten worden voor de functie \code{send} als parameters gebruikt. \\
+
+\begin{lstlisting}[language=Python, firstnumber=58, label=send()]
+def send(message_plain, target_id):
+    #global user_arr
+
+    # the user_arr looks like: [{...:[...]}, {...:[...]}, {...:[...]}] etc. We convert it to {...:[...], ...:[...], ...:[...]}.
+    user_dict = {}
+    for d in ns.user_arr:
+        user_dict.update(d)
+    target_pubk = user_dict[target_id][0]
+    target_modc = user_dict[target_id][1]
+    parameters = generate_message(message_plain, target_pubk, target_modc)
+    r = requests.post(url="http://127.0.0.1:5000/send", json=parameters)
+\end{lstlisting}
+Deze functie zorgt ervoor dat er gestuurd wordt naar de server. De eerste parameter is het bericht in normale, onversleutelde tekst ("plaintext"). De tweede parameter is de gebruikersnaam van de beoogde ontvanger. Om te beginnen wordt de gedeelde lijst (tussen beide processen) met alle data van de geregistreerde gebruikers gekopieerd op een manier dat het makkelijker is om mee te werken. De data die hierin te vinden is, is in precies hetzelfde formaat als de data die naar de server is gestuurd ter registratie, dus dat betekent dat de publieke sleutel te vinden is aan de naam van de gebruiker. Zo worden de publieke sleutel en modulusklasse opgeslagen. Nu kan het versleutelde bericht opgesteld worden door de functie \code{generate_message} op te roepen met deze informatie. Als de content van het bericht duidelijk is, wordt dit gestuurd naar de \code{send} route, met het versleutelde bericht als JSON parameter. \\
+
+\begin{lstlisting}[language=Python, firstnumber=41]
+def generate_message(message_plain, target_pubk, target_modc):
+    now = datetime.now()
+    timestamp = datetime.timestamp(now)
+
+    msg_hash = int.from_bytes(sha256(message_plain.encode('utf-8')).digest(), 'big')
+    signed_msg_hash = cryptils.decrypt_RSA(msg_hash) # the same as signing :wow:
+    msg_int = cryptils.to_int(message_plain)
+    msg_done = cryptils.encrypt_RSA(int(msg_int), base=target_pubk, modulo=target_modc) # or: encrypt with public key
+
+    parameters = {
+            "time": floor(timestamp),
+            "hash": signed_msg_hash,
+            "msg": msg_done,
+            "userID": userID
+    }
+    return parameters
+\end{lstlisting}
+Deze functie zorgt voor de versleuteling van een bericht aan de hand van het "plaintext" bericht en de publieke sleutel van de beoogde ontvanger. Eerst wordt de exacte seconde sinds 1970 vastgesteld (aangezien elke stap een fractie van een seconde duurt, is dit in principe dezelfde seconde als waarop het bericht verstuurd wordt). Daarna wordt de hash gevonden van het "plaintext" bericht en wordt dit opgeslagen als getal. Dit wordt digitaal getekend door het te ontcijferen.\footnote{Zie \ref{Crypt_Functions} voor waarom dit hetzelfde is als het versleutelen met de eigen privésleutel} Vervolgens wordt het "plaintext" bericht omgezet naar een geheel getal en wordt het versleuteld met de publieke sleutel van de ontvanger. Al de zojuist berekende data wordt in een keurig JSON object gezet en wordt teruggegeven door de functie.
+
+\subsubsection{Ontvangstsysteem}
+\begin{lstlisting}[language=Python, firstnumber=77]
+def update():
+    data_arr = []
+    while True:
+        ns.user_arr = requests.get(url="http://localhost:5000/getusers").json()
+        latest_data = receive(len(data_arr))
+        time.sleep(1)
+
+        if latest_data != []:
+            data_arr.extend(latest_data)
+            for i in latest_data:
+                msg_plain = message_postprocessing(i["msg"], i["userID"])
+                if validate_integrity(str(msg_plain), i["hash"], i["userID"]):
+                    print("\n---\nintegrity validated\n---")
+                    print(f"\n---------\n{i["userID"]}:\t{msg_plain}\n---------\ncryptsystem01 ~$ ", end="")
+\end{lstlisting}\label{stuur_code}
+Dit is dus de functie die het ontvangen en interpreteren regelt. Deze functie bestaat net zoals de code voor het verzenden uit een grote \textit{loop}, maar deze wacht niet. In plaats daarvan vraagt deze functie in regel 80 en 81 elke seconde om de meest recente berichten. Voor de lijst aan geregistreerde  gebruikers is het redelijk rechttoe rechtaan: elke keer dat deze regel langskomt wordt lijst van gebruikers compleet vervangen voor de nieuwste versie, gedownload van de server op de route \code{/getusers}. Voor de data in de berichten ligt het echter wat ingewikkelder. Op schaal is het onmogelijk om elke seconde alle data compleet te verversen, dus in dit programma is er een systeem geschreven dat alleen de niet eerder ontvangen berichten verzoekt van de server.
+\par Als er dus nieuwe berichten zijn, oftewel dat de lijst aan nieuwste data niet leef is, dan wordt de lijst aan gelezen data bijgewerkt zodat die berichten niet opnieuw verzocht worden. Daarna wordt elk nieuw bericht achter elkaar onderzocht.\footnote{Vrijwel altijd komt er minder dan een bericht per seconde aan, maar met dit systeem kan een gebruiker die net aan is gekomen terwijl andere gebruikers al veel berichten hebben gestuurd nog steeds elk bericht lezen.} Van het nieuwste bericht wordt met de versleutelde tekst en de userID van de zender een poging gedaan om het bericht om te zetten naar correct leesbare tekst. Er wordt gekeken of dit is gelukt. Zo ja, wordt het bericht samen met de gebruikersnaam van de zender aan de gebruiker getoond. \\
+
+\begin{lstlisting}[language=Python, firstnumber=70]
+def receive(current_msg = 0):
+    r = requests.get(url="http://127.0.0.1:5000/receive", params={"current" : current_msg})
+    return r.json()
+\end{lstlisting}\label{stuur_code}
+Deze simpele functie zorgt ervoor dat alleen de ongelezen berichten aan de server worden gevraagd. Dit wordt gedaan door de berichten met een parameter te laden. Deze parameter specificeert hoeveel berichten de gebruiker al heeft gezien. De server vergelijkt die waarde met hoeveel berichten er zijn opgeslagen. Dus als de server 15 berichten heeft en de gebruiker meedeelt dat hij er 12 heeft gezien, dan moeten de laatste drie berichten wel ongelezen zijn. Als de gebruiker echter al 15 berichten heeft gezien, dan weet de server dat de gebruiker actueel is en wordt er niets gestuurd. \\
+
+\begin{lstlisting}[language=Python, firstnumber=29]
+def message_postprocessing(msg_pre, alleged_senderID):
+    # the user_arr looks like: [{...:[...]}, {...:[...]}, {...:[...]}] etc. We convert it to {...:[...], ...:[...], ...:[...]}.
+    user_dict = {}
+    for d in ns.user_arr:
+        user_dict.update(d)
+    a_sender_pubk = user_dict[str(alleged_senderID)][0]
+    a_sender_modc = user_dict[str(alleged_senderID)][1]
+    msg_int = cryptils.decrypt_RSA(msg_pre)
+    msg_decrypted = cryptils.to_ascii(msg_int)
+    return msg_decrypted
+\end{lstlisting}
+Deze functie neemt een versleuteld bericht en de gebruikersnaam van degene die claimt de zender te zijn. Deze functie doet vrijwel hetzelfde als de \code{send}(\ref{send()}) functie, maar dan andersom. Belangrijk om te weten is dat het ontcijferde resultaat van deze functie meestal vuilnis is. Alleen in het geval dat de huidige gebruiker ook de beoogde ontvanger van het bericht is, zal hier iets zinnigs uitkomen. \\
+
+\begin{lstlisting}[language=Python, firstnumber=16]
+def validate_integrity(msg_plain, hash_signed, senderID):
+    user_dict = {}
+    for d in ns.user_arr:
+        user_dict.update(d)
+    sender_pubk = user_dict[str(senderID)][0]
+    sender_modc = user_dict[str(senderID)][1]
+    suspected_hash = int.from_bytes(sha256(msg_plain.encode('utf-8')).digest(), 'big')
+    # de - signed, as in, removed the sign.
+    hash_designed = cryptils.encrypt_RSA(int(hash_signed), base=sender_pubk, modulo=sender_modc)
+    if hash_designed == suspected_hash:
+        return True
+    return False
+\end{lstlisting}
+Met deze functie wordt het eerder genoemde probleem opgelost, namelijk de interpretatie van het bericht, of het wel of niet in orde is. Deze functie neemt het zojuist ontcijferde (of poging tot) bericht, de handtekening (dus de hash versleuteld met de privésleutel van de zender) en de gebruikersnaam van de zender. Deze functie stelt een hash op van het mogelijk ontcijferde bericht op dezelfde manier als de zender het zou hebben gedaan. Als dit dus hetzelfde bericht is als het bericht dat de zender heeft berekend, dan betekent het dus dat de hash die de zender heeft gemaakt hetzelfde is als deze hash. Als de zender is wie hij claimt te zijn dan is wordt de hash met de juiste publieke sleutel ontcijferd en hebben we dus de hash die de zender heeft berekend. Dan is er nog een simpele check om te kijken of ze hetzelfde zijn en zo ja weten we dat de zender is wie hij claimt dat hij is, dat het bericht door de zender is gestuurd, dat het bericht correct is ontcijferd en dat het bericht voor ons bedoeld is (tabel \ref{tab:send_receive_truthtable}). Als een van deze punten ontbreekt zijn de hashes niet hetzelfde en is het bericht te verwaarlozen.
+
+\subsection{Server} 
+De server is geschreven als een simpele 
+\begin{lstlisting}[language=Python, firstnumber=16]
+
+\end{lstlisting}
+
 \chapter{Cybercriminaliteit}
+Cybercriminaliteit is een categorie misdaad waarbij ICT wordt gebruikt en tegelijk het doelwit is. Steeds meer mensen worden slachtoffer van cybercrime: vorig jaar gebeurde 42\% van criminaliteit online. Maar liefst 2 op de 3 Nederlanders kreeg vorig jaar een nep-sms'je of nepmail.\footnote{\cite{OM_cybercrime}.} Criminelen gebruiken allerlei manieren om hun doelen te bereiken, die in dit hoofdstuk worden behandeld.
 
 \section{Verschillende methoden}
-% evt nog subsections?
+Onder cybercrime vallen veel verschillende soorten aanvallen. Hieronder zullen wij een aantal belangrijke types behandelen die betrekking hebben op programma's die berichten kunnen verzenden, zoals ons protocol.
+
+\subsection{Malware}
+Malware is een erg brede term voor allerlei soorten programma's die iemand schade aan kunnen doen. Hier zullen wij twee soorten malware behandelen die relevant zijn voor ons eigen protocol.
+\subsubsection{Spyware}
+Spyware is een type software dat onopgemerkt informatie van mensen verzamelt. Dergelijke programma's kunnen op veel verschillende manieren op een computer belanden. Onder spyware vallen onder andere infostealers: dit is software die allerlei info zoals mailadressen verzamelt van een gebruiker. Ook keyloggers behoren tot spyware: dit zijn programma's die alle activiteit op een computer kunnen vastleggen, bijvoorbeeld wanneer iemand zijn wachtwoord intikt op een site.\footnote{\cite{spyware}.}
+\subsubsection{Trojans}
+Trojans, vernoemd naar het mythische Paard van Troje, zijn kwaadaardige programma's die zich voordoen als onschuldige programma's. Dit is dus eigenlijk meer een manier waarop malware zich kan verspreiden en niet zozeer een eigen type virus.\footnote{\cite{trojan}.}
+
+\subsection{DDoS}
+De term DDoS staat voor ‘Distributed Denial of Service’. Dit betekent dat iemand een enorme hoeveelheid valse aanvragen naar een netwerk of website stuurt om het te overbelasten en plat te leggen. Grote bedrijven zoals Google krijgen vaak met zulke aanvallen te maken. DDoS-aanvallen worden ook veelvuldig gebruikt door landen zoals Rusland om cyberaanvallen uit te voeren op vijandige doelwitten. ***. Naast DDoS-aanvallen bestaan ook DoS-aanvallen (Denial of Service): deze hebben hetzelfde doel, maar DDoS-aanvallen komen van veel verschillende computers (vandaar ook 'Distributed'). Dit zorgt ervoor dat DDoS-aanvallen sneller zijn en veel moeilijker om te verhelpen dan gewone DoS-aanvallen.\footnote{\cite{cybercrowdstrike}.}
+
+\subsection{Phishing}
+Phishing is een vorm van cybercriminaliteit waarbij social engineering en online communicatie worden gebruikt om gevoelige info te bemachtigen. Bij phishing proberen hackers vaak hun slachtoffers het gevoel te geven dat ze meteen moeten handelen, omdat ze dan minder goed zullen opletten. Hackers sturen bijvoorbeeld een mail dat je PayPal-account verdachte transacties heeft gemaakt en gesloten zal worden als je niet je account verder verifieert. Deze mail lijkt dan van PayPal te komen, maar met de link word je doorgestuurd naar een nepsite die erg op die van PayPal lijkt. Wanneer je vervolgens hier bent ‘ingelogd’, worden je gegevens gestolen en hebben de hackers volledige toegang tot je account.\footnote{\cite{cybercrowdstrike}.}
+
+\subsection{Spoofing}
+Bij spoofing doet een hacker zich voor als een betrouwbare instantie, waarbij verschillen erg moeilijk te zien zijn. Een voorbeeld hiervan is domain spoofing: een nepsite doet zich voor als een echte website van bijvoorbeeld een bank. Op het eerste gezicht lijkt deze site echt te zijn, maar bij een nauwkeurigere inspectie zijn minieme verschillen zichtbaar. Ook via e-mail kunnen hackers spoofing gebruiken: ze vervalsen hun mailadressen zodat het lijkt alsof een bepaalde mail van een betrouwbare instantie komt.\footnote{\cite{cybercrowdstrike}.}
+
 \section{Gevolgen voor ons protocol}
+Er zijn dus veel verschillende mogelijke cyberaanvallen die de cryptografie raken. Ook ons eigen protocol zou hier de gevolgen van kunnen ondervinden in de echte wereld. Hier zijn een aantal voorbeelden voor de bovenstaande voorbeelden samengevat:
+
+\begin{itemize}
+    \item De twee genoemde types malware zouden veel impact kunnen hebben op ons protocol. Met spyware zouden (privé)gegevens van gebruikers kunnen worden bijgehouden, wat mogelijk maakt dat deze gegevens worden misbruikt. Als een kwaadaardige gebruiker een trojan naar de server stuurt en weet uit te voeren, zou dat de server onbetrouwbaar kunnen maken. Echter, het enige wat de server doet, is versleutelde berichten opslaan en onder alle gebruikers verspreiden: het ergste wat zou kunnen gebeuren, is dat de communicatie via de server wordt platgelegd. %klopt dit?
+    \item Een DDoS-aanval op het netwerk zou het netwerk plat kunnen leggen, mits er genoeg data wordt verzonden en opgevraagd om de server te overbelasten. De pakketjes die naar en van de server worden gestuurd, zijn echter erg klein, maar met genoeg computers zou een aanval nog steeds succesvol kunnen zijn. Dit kan mogelijk worden opgelost door het netwerk te decentraliseren: in plaats van één server die alle data verzamelt, zou dan alle data onderling worden verzonden via een P2P-netwerk. Dat zou echter tegen de vereisten van ons protocol ingaan: er is juist bepaald dat alle communicatie via een centrale server zou moeten gaan.
+    \item Phishingaanvallen zouden de betrouwbaarheid van individuele gebruikers in het netwerk in twijfel kunnen trekken: een cybercrimineel zou iemands gegevens kunnen misbruiken in het netwerk. Dit zou voor allerlei problemen kunnen zorgen, maar de cryptografische basis achter het protocol is nog altijd betrouwbaar.
+    \item Als cybercriminelen besluiten spoofing toe te passen, zouden gebruikers mogelijk in een nepnetwerk belanden van cybercriminelen. Dit is een mogelijke manier om bijvoorbeeld een phishingaanval uit te voeren, wat tot de hierboven beschreven gevolgen zou leiden.
+\end{itemize}
 
 \chapter{Quantumcomputers}
+Quantumcomputers lijken al jaren de \textit{final frontier} van computers. Ze zouden computers vele malen sneller kunnen maken dan ze nu zijn door het gebruik van qubits. Qubits zijn bits die door de quantummechanica in een superpositie kunnen zijn van 0 en 1 tegelijk. Dit is in tegenstelling tot traditionele bits van silicium, die slechts één van de twee tegelijk kunnen zijn. Met qubits bestaan dus eigenlijk alle mogelijke toestanden van bits op hetzelfde moment. Met \textit{logic gates} kun je vervolgens al deze toestanden tegelijkertijd beïnvloeden. Dit betekent dat quantumcomputers veel meer taken parallel kunnen uitvoeren dan traditionele computers. Dit maakt ze vele malen sneller: elke qubit kan de computer wel twee keer zo snel maken.\footnote{\cite{tandf_quantum}.}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/quantum-computers-and-accelerated-discovery_40645906341_o.jpg}
+    \caption[]{Een quantumcomputer van IBM.\protect \footnotemark} 
+    \label{fig:quantum_comp}
+\end{figure}
+
+\section{Huidige problemen}
+Er zijn momenteel echter een paar grote problemen met\footnotetext{\cite{quantum_img}.} quantumcomputers die ervoor zorgen dat ze nog niet krachtig genoeg zijn en niet op grote schaal kunnen worden ingezet.
+\par Ten eerste zijn quantumcomputers erg gevoelige apparaten: het kleinste beetje ruis zou het quantumsignaal onbruikbaar kunnen maken. De computers moeten dus bijna volledig geïsoleerd zijn van de buitenwereld. Bovendien moeten ze bijna tot het absolute nulpunt worden gekoeld, aangezien temperatuur ook ruis creëert op quantumschaal. Dit betekent dat quantumcomputers momenteel nog nauwelijks buiten wetenschappelijke laboratoria of overheidsgebouwen te vinden zijn.\footnote{\cite{cskirschquantum}.}
+\par Ten tweede zijn de computers niet heel accuraat. Net zoals de quantummechanica werken de apparaten met kansen, in tegenstelling tot de binaire werking van siliciumbits. Aangezien de zekerheid van siliciumbits ontbreekt bij quantumcomputers, zijn ze simpelweg minder accuraat dan traditionele computers.\footnote{\cite{cskirschquantum}.}
+\par Daarnaast hebben quantumcomputers veel meer fouten in hun bits dan gewone computers. Onder andere fasefouten kunnen metingen van de qubits volledig nutteloos maken. Dit zorgt ervoor dat het overgrote deel van qubits voor foutcorrectie moet worden gebruikt: een computer met zo’n 2000 fysieke qubits heeft waarschijnlijk minder dan 20 logische qubits, oftewel qubits die daadwerkelijk in superpositie staan. Dat betekent nog steeds dat quantumcomputers nu al honderdduizenden keren sneller zijn dan gewone computers, maar de meeste encryptiealgoritmes zijn nog steeds tegen de computers bestand. Het kan namelijk makkelijk miljarden jaren kosten om een goed encryptiealgoritme te kraken op traditionele computers; ook met quantumcomputers zijn ze dus nog niet binnen een reële tijd kraakbaar.\footnote{\cite{cskirschquantum}.}
+
 \section{Gevaren}
+Doordat quantumcomputers zoveel sneller zijn dan reguliere computers, is het kraken van RSA-encryptie met quantumcomputers wel mogelijk binnen een redelijke tijd. In het bijzonder Shors algoritme is momenteel een goede kandidaat om RSA op quantumcomputers te kunnen kraken. Dit is een algoritme dat met behulp van de publieke sleutel de privésleutel van een gebruiker kan achterhalen. Op traditionele computers is dit algoritme te langzaam om te gebruiken, maar op quantumcomputers wellicht niet meer.
+\par Hoewel 99\% van servers waar mogelijk andere encryptiealgoritmes gebruikt dan RSA, zijn de alternatieven (zoals elliptic curve-cryptografie) ook niet quantum-proof. Bovendien staat 52\% van servers nog steeds RSA-handshakes toe.\footnote{\cite{f5telemetry}.} Dit betekent dat zowel ons eigen algoritme als vrijwel alle moderne public-key cryptografie volledig onbruikbaar wordt wanneer quantumcomputers krachtig genoeg worden om de berichten te ontcijferen. Daar komt nog eens bij dat de technologie erg snel verbetert: de meerderheid van experts verwacht dat quantumcomputers voor het jaar 2045 RSA-2048, de gouden standaard voor RSA, kunnen kraken binnen 24 uur.\footnote{\cite{econ_quantum}.} 
+\par Bovendien zal de gewone man niet degene zijn die als eerste toegang heeft tot quantumcomputers. De apparaten zullen, vanwege de gevoelige en dure apparatuur, in handen zijn van grote spelers met veel geld. Met name grote bedrijven en overheden hebben de middelen en een reden om quantumcomputers in te zetten om encryptie te kraken: bedrijven willen zoveel mogelijk gegevens verzamelen over hun klanten om daarmee geld te verdienen en overheden kunnen gemakkelijker hun burgers bespioneren en dissidenten opsporen. Kortom, grootschalig gebruik van quantumcomputers zou een enorm verlies van privacy betekenen, met name op het internet. %Klopt dit?
 %Ook gevaren voor eigen protocol benoemen!
 
 \section{Oplossingen}
+Quantumcomputers vormen dus een groot gevaar voor de cryptografie. Vrijwel alle public-key cryptografie die tegenwoordig wordt gebruikt is kwetsbaar. De vraag is dus: wat kunnen we hiertegen doen? Er zijn een aantal mogelijke manieren om encryptie tegen de gevaren van quantumcomputers te beschermen. Een paar hiervan zijn hier toegelicht.
+\subsection{Symmetrische cryptografie}
+In tegenstelling tot public-key cryptografie is symmetrische cryptografie wél bestand tegen quantumcomputers. Dit komt doordat de sleutel alleen voor de communicerende partijen bekend is. Als iemand dus symmetrische encryptie wil kraken met een quantumcomputer, kan hij alleen maar proberen te brute-forcen en lukraak sleutels proberen totdat het lukt. Dat gaat weliswaar sneller dan met traditionele computers, maar de encryptie zelf is nog steeds veilig tegen quantumcomputers. Encryptie met kleinere sleutels wordt hierbij wel onveilig, maar als de sleutels lang genoeg zijn, is het algoritme nog steeds veilig. In het bijzonder wordt AES, momenteel het meest gebruikte symmetrische encryptieprotocol ter wereld, als een erg veilig post-quantumencryptieprotocol gezien: de Amerikaanse NSA vindt AES-192 en AES-256 veilig genoeg voor de beveiligingsniveaus \textit{Secret} en \textit{Top Secret}.\footnote{\cite{arxiv_quantum}.}
+\subsection{Lattice-based cryptografie}
+Lattice-based cryptografie is een vorm van encryptie die werkt door middel van het vermenigvuldigen van matrices in plaats van priemgetallen. Het is namelijk wiskundig erg moeilijk om de inverse van een matrix te berekenen, ook voor quantumcomputers. Dit maakt het vermenigvuldigen van matrices een eenrichtingsfunctie, ook op quantumcomputers, net zoals het vermenigvuldigen van priemgetallen dat nu is op gewone computers. Momenteel is de beste kandidaat voor lattice-based cryptografie het algoritme NTRU. Dit algoritme berust op de moeilijkheid van het factoriseren van bepaalde algebraïsche vergelijkingen. Het nadeel van lattice-based cryptografie is de benodigde lengte van de sleutels: om met NTRU een effectieve sterkte van 128 bits te hebben, de standaard in de cryptografie, moeten de sleutels 12.881 bits lang zijn. Dat is veel langer dan andere algoritmes van dezelfde sterkte.\footnote{\cite{arxiv_quantum}.}
+\par Lattice-based en symmetrische quantumcryptografie kunnen wel worden aangevallen met behulp van Grovers algoritme. Dit algoritme maakt gebruik van een \textit{oracle}, een externe quantumsubroutine, om encryptie sneller te kraken. Dit betekent in de praktijk dat de veiligheid van quantum-proof algoritmes, gemeten in bits, 2 keer zo klein als op traditionele computers. Een algoritme met een veiligheid van 128 bits op siliciumcomputers heeft dus slechts 64 bits aan veiligheid op quantumcomputers. Echter, het algoritme wordt steeds inefficiënter naarmate de sleutels langer worden: het algoritme zorgt dus alleen ervoor dat de encryptiesleutels langer moeten worden gemaakt om dezelfde veiligheid te behouden en vormt geen echte dreiging voor de encryptiealgoritmes.\footnote{\cite{grover_quantum}.}
+\subsection{Quantumencryptie}
+Quantumcomputers creëren ook nieuwe mogelijkheden voor de cryptografie: encryptie die alleen op quantumcomputers mogelijk is. Het gaat hierbij in het bijzonder om \textit{Quantum Key Distribution} (QKD): programma’s die met behulp van quantumfysische verschijnselen sleutels kunnen uitwisselen, die vervolgens kunnen worden gebruikt voor symmetrische encryptiealgoritmes zoals AES. Het interessantste QKD-algoritme is BB84. Dit programma werkt met het polariseren van fotonen om een sleutel te genereren (zie figuur \ref{fig:bb84}). Als de fotonen door een derde partij worden bekeken, ontstaan er fouten; de detector slaat vervolgens af. Dit betekent dat het onmogelijk is om ongezien de sleutels te bekijken; als de doorgegeven sleutel ook nog eens volledig willekeurig is, is de daaropvolgende symmetrische encryptie in theorie onbreekbaar.\footnote{\cite{arxiv_quantum}.} 
+\par Momenteel zijn er echter nog problemen met deze vorm van cryptografie. De infrastructuur die nodig is om de fotonen te polariseren, verzenden en lezen is nog erg duur. Verder is deze manier van sleuteluitwisseling nog alleen op erg korte afstanden mogelijk: als de afstanden te groot zijn, ziet de detector zoveel fouten dat het niet te zeggen is of er iemand meekijkt of niet.\footnote{\cite{tandf_quantum}.} Bovendien kan de veiligheid van het protocol niet altijd worden gegarandeerd: het algoritme is theoretisch gezien veilig, maar dat betekent nog niet dat de gebruikte hardware veilig is. Onderzoekers hebben BB84-sleutels afgekeken zonder dat de detector afsloeg door de detector blind te maken voor de fouten die het afkijken veroorzaakte.\footnote{\cite{arxiv_quantum}.}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.75\linewidth]{images/1804.00200v1.pdf Page 7 image 1.png}
+    \caption{Schematische weergave van het BB84-protocol.\protect \footnotemark}
+    \label{fig:bb84}
+\end{figure}\footnotetext{\cite{arxiv_quantum}.}
 
 \chapter{Conclusie}
+Moderne cryptografie heeft dus verschillende belangrijke aspecten. Achter moderne cryptografie zit een duidelijke wiskundige basis. Priemgetallen worden veel gebruikt in de cryptografie vanwege hun ondeelbaarheid: ze kunnen alleen worden gedeeld door 1 of zichzelf. Getallen die copriem aan elkaar zijn, worden ook vaak gebruikt. Daarnaast is ook modulair rekenen van groot belang. Vrijwel alle encryptiealgoritmes gebruiken modulair rekenen om berichten te kunnen versleutelen en ontsleutelen met verschillende bewerkingen of sleutels, zodat niet kan tussendoor de inhoud van een bericht kan worden bepaald door een afluisterende partij. Ook modulaire inverses spelen een belangrijke rol, bijvoorbeeld in RSA. Dit algoritme maakt gebruik van inverses om met twee verschillende getallen een bericht te versleutelen en weer te ontcijferen.
+\par Het ontwerpen van een eigen encryptieprotocol laat zien hoe dit allemaal in de praktijk kan worden gebracht. Na het bepalen van verschillende vereisten zijn een aantal cryptografische primitieven uitgekozen om te verwerken tot een cryptosysteem. Een client-servermodel, dat ook in de echte wereld terug toegepast wordt, is gebruikt.
+\par Er zijn verschillende methoden om encryptiesystemen te kraken. De belangrijkste hedendaagse dreiging is cybercriminaliteit. Criminelen maken gebruik van social engineering en kwaadaardige programma's om gegevens te stelen van gebruikers, of overspoelen servers met enorme hoeveelheden verzoeken om zo een netwerk plat te leggen. Dit voorkomt complexe wiskundige analyse van algoritmen en maakt gebruik van menselijke fouten.
+\par In de toekomst kunnen quantumcomputers ook een belangrijke bedreiging vormen voor de cryptografie. Deze apparaten kunnen met behulp van quantumfysische verschijnselen exponentieel sneller cryptografische algoritmes kraken dan met conventionele computers mogelijk is. In plaats van miljarden jaren kost het kraken van deze algoritmes op quantumcomputers in de toekomst misschien slechts een dag. Vooral asymmetrische cryptografie loopt hier gevaar: bij symmetrische cryptografie is de sleutel niet openbaar en is de dreiging van quantumcomputers minder acuut. Enkele veelgebruikte algoritmes zoals RSA zullen echter vrij snel kunnen worden gekraakt op quantumcomputers, wat de veiligheid van hun encryptie teniet zal doen. Er zijn verschillende mogelijke manieren om de cryptografie quantum-proof te maken. Lattice-based cryptografie, die werkt met het vermenigvuldigen van matrices, en Quantum Key Distribution, waar quantumfysica wordt toegepast om veilig symmetrische sleutels te verspreiden, zijn de meest veelbelovende kandidaten.
 
 \chapter{Discussie en reflectie}
+\section{Discussie} %lees door aub
+Er zijn een aantal punten waar kritiek kan worden geleverd op onze cryptografische implementatie. ***
+\par Ten eerste is RSA een erg verouderd encryptiesysteem. Veel servers staan geen RSA meer toe en andere methoden, zoals elliptic curve cryptography, worden veel meer gebruikt. Bovendien is RSA niet quantumproof: in de toekomst zal ons cryptosysteem dus makkelijk te kraken zijn. ***\\
+Hoewel RSA inderdaad enigszins achterhaald is, maakt dit RSA nog niet onbruikbaar. Het algoritme is extreem simpel. Het genereren van priemgetallen is de moeilijkste klus, en nadat dat is gedaan, kost de echte RSA-encryptie slechts circa 25 regels aan code. Ter vergelijking: het ontvangen van een bericht kost 27 regels. Dit maakt het algoritme erg efficiënt en daarmee snel in vergelijking met andere asymmetrische encryptiealgoritmes. In een toekomstige versie zou eventueel een ander public-key algoritme kunnen worden gebruikt, bijvoorbeeld elliptic-curve cryptography of lattice-based cryptography. 
+\par Een tweede mogelijk kritiekpunt is dat er geen symmetrische encryptie is gebruikt, terwijl dat wel efficiënter zou kunnen zijn. In hoofdstuk 6.1 is echter al uitgebreid aan bod gekomen waarom hier niet voor gekozen is.
+\par Daarnaast kondigt ons cryptosysteem het bestaan van berichten aan iedereen aan. Nu is de inhoud van de berichten nog steeds veilig, aangezien die versleuteld is, maar in sommige situaties zegt het al genoeg wanneer iemand weet dat er een bericht is verstuurd. Om dit veiliger te maken, zouden eventueel decoyberichten kunnen worden verstuurd: berichten met onzin en een hash die niet overeenkomt met de inhoud. Op deze manier is het niet mogelijk om te weten of een bericht echt is, tenzij je de bedoelde ontvanger bent van een bericht. Dit zou wel meer druk op de server kunnen zetten: de server ontvangt misschien wel tientallen malen zoveel berichten als er ook decoyberichten worden verstuurd, die vervolgens naar alle clients moeten worden verstuurd.
 
-\chapter{***fiks bibliografie nog***}
-%moet bibliografie niet een hoofdstuk zijn?
+\section{Reflectie}
+\subsection{Otto}
+
+
+\subsection{Christiaan}
+Als ik terugkijk op ons profielwerkstuk, ben ik erg blij met hoe alles is verlopen. Aanvankelijk zou het vooral een wat saai literatuuronderzoek worden, maar ik ben blij dat we dit hebben voorkomen. We hebben met elkaar veel de hoe en wat van het profielwerkstuk besproken en, toen dat nodig bleek, het roer omgegooid en zelf ook flink wat code geschreven. Ik ben erg trots op het eindproduct: een redelijk uitgebreide bespreking van verschillende cryptografische onderwerpen, maar ook diepgang in de praktische kant van de cryptografie door middel van een eigen protocol. Bovendien hebben we redelijk goed ons profielwerkstuk gepland qua tijd. Tegen oktober was de code en de meerderheid van het literatuuronderzoek af, en hoefden we eigenlijk alleen nog maar te schrijven. Dit zorgde ervoor dat we in november rustiger aan konden doen dan andere groepjes. Ik heb gedurende ons profielwerkstuk nooit de angst gehad dat het niet op tijd af zou komen of dat we in de laatste weken nog dertig uur bij moesten werken.
+\par Als we dit profielwerkstuk opnieuw zouden doen, zou ik een paar dingen veranderen. Ten eerste zou ik wat gerichter bepalen welke onderdelen precies worden behandeld. We waren bijvoorbeeld een tijd aan het twijfelen of we wel of niet symmetrische cryptografie wilden bespreken. Ik heb dus ook enkele uren onderzoek gedaan naar onder andere AES, terwijl dat uiteindelijk helemaal niet nodig was. Het was in dit opzicht wat makkelijker geweest als we wat eerder al hadden bepaald wat we wel en niet wilden behandelen.
+
 \printbibliography
 
 \chapter{Logboek}
@@ -159,7 +695,18 @@ Een client stuurt een \textit{packet} naar de server.
 
 \section{Christiaan}
 
-%nog code invoegen???
+\chapter{Bijlage A: de code}
+\section{Primes.py}
+\lstinputlisting[language=Python]{./Code/primes.py}
+
+\section{Cryptils.py}
+\lstinputlisting[language=Python]{./Code/cryptils_fixed.py}
+
+\section{Client.py}
+\lstinputlisting[language=Python]{./Code/client_fixed.py}
+
+\section{App.py}
+\lstinputlisting[language=Python]{./Code/app.py}
 
 \chapter{Verklaring eigen werk}
 
